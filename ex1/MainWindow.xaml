@@ -43,7 +43,7 @@
             <Button x:Name="OpenTrainButton" Content="Open&#xD;&#xA;Train" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="102" Click="OpenTrainButton_Click" Grid.RowSpan="2" RenderTransformOrigin="0.436,1.394" Margin="-2,0,0,0" Grid.Row="2"/>
             <Button x:Name="OpenTestButton" Content="Open&#xA;Test" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="102" Click="OpenTestButton_Click" Grid.RowSpan="2" RenderTransformOrigin="0.436,1.394" Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="1"/>
         </Grid>
-        <Grid HorizontalAlignment="Left" Height="285" Margin="0,10,0,0" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=grid, Mode=OneWay}">
+        <Grid HorizontalAlignment="Left" Height="285" Margin="10,10,-10,0" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=grid, Mode=OneWay}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -53,11 +53,21 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Image x:Name="planeImage" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="275" Margin="10,0,0,0" VerticalAlignment="Top" Width="476" Stretch="Fill" >
-                <Image.Source>
-                        C:\Users\WIN10\source\repos\ex1\fg.png
-                </Image.Source>
-            </Image>
+            <Slider x:Name="rudderSlider" Grid.Column="4" HorizontalAlignment="Left" Margin="80,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="7.583,0.056" Grid.ColumnSpan="3" Width="282" BorderThickness="0" Foreground="#FF0F08B0" BorderBrush="#FF030D68" Background="#FF92DCF1" OpacityMask="#FF851A1A" IsEnabled="False">
+                <Slider.Effect>
+                    <DropShadowEffect/>
+                </Slider.Effect>
+            </Slider>
+            <Slider Grid.Column="3" HorizontalAlignment="Right" Margin="0,153,74,0" VerticalAlignment="Top" Width="239" Grid.ColumnSpan="3" RenderTransformOrigin="0.467,-1.373">
+                <Slider.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-89.573"/>
+                        <TranslateTransform X="-23.579" Y="31.684"/>
+                    </TransformGroup>
+                </Slider.RenderTransform>
+            </Slider>
         </Grid>
     </Grid>
 </Window>
