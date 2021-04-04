@@ -29,24 +29,24 @@ namespace ex1
             this.fgPath = fgPath;
         }
 
-        public bool Start()
+        public bool Start(string protocolName, int dataPort = 5400, int telnetPort = 5402)
         {
             string FGargs = " --timeofday=noon" +
                                 " --prop:/sim/menubar/visibility=false" +
                                 " --prop:/sim/rendering/shaders/skydome=false" +
-                                " --generic=socket,in,10,127.0.0.1,5400,tcp,playback_small" +
+                                " --generic=socket,in,10,127.0.0.1," + dataPort + ",tcp," + protocolName +
                                 " --fdm=null --prop:/sim/sound/voices/enabled=false" +
                                 " --prop:/sim/view[1]/enabled=true --geometry=750x500" +
-                                " --telnet=socket,in,10,127.0.0.1,5402,tcp --disable-ai-models";
+                                " --telnet=socket,in,10,127.0.0.1," + telnetPort + ",tcp --disable-ai-models";
 
-            var psi = new ProcessStartInfo(this.fgPath + "fgfs.exe", FGargs);
+            var psi = new ProcessStartInfo(this.fgPath + "\\fgfs.exe", FGargs);
             psi.WorkingDirectory = this.fgPath;
             this.fgProcess = Process.Start(psi);
             this.fgProcess.Exited += delegate (object x, EventArgs e) { this.fgProcess = null; };
             this.fgProcess.Exited += delegate (object x, EventArgs e) { this.Close(); };
             this.fgTcp = new FgTcp();
 
-            return this.fgTcp.Init(5400, 5402);
+            return this.fgTcp.Init(dataPort, telnetPort);
         }
 
         public bool SendPlayback(string line)
