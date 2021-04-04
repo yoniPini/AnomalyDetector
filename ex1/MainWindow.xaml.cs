@@ -25,6 +25,11 @@ namespace ex1
         public MainWindow()
         {
             InitializeComponent();
+            AnomalyDetectorsManager y = new AnomalyDetectorsManager();
+            DLL.IAnomalyDetector x = y.AddAnomalyDetector(Utils.GetFileDetailsFromUserGUI(
+                "anomaly file", "*.dll").FullPath);
+            MessageBox.Show(Utils.ParseFeaturesLine(Utils.GetFileDetailsFromUserGUI(
+                "protocol file", "*.xml").FullPath));
         }
         
         private void SpeedTextBox_KeyDown(object sender, KeyEventArgs e)

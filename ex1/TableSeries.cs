@@ -46,7 +46,7 @@ namespace ex1
                     values = sr.ReadLine();
                     valuesLinesNumber--;
                 }
-                this.featuresStr = featuresLine.Split(",");
+                this.featuresStr = featuresLine.Split(',');
                 this.featuresToInt = new Dictionary<string, int>();
                 for (int k = 0; k < this.featuresStr.Length; k++)
                     if (!this.featuresToInt.ContainsKey(this.featuresStr[k]))
