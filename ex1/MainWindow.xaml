@@ -1,12 +1,63 @@
-﻿<Window x:Class="ex1.MainWindow"
+﻿<Window x:Name="window" x:Class="ex1.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ex1"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        mc:Ignorable="d" Height="610" Width="867" Title="something">
+    <Grid x:Name="grid" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Height="{Binding ActualHeight, ElementName=window, Mode=OneWay}" Width="{Binding ActualWidth, ElementName=window, Mode=OneWay}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="340*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="grid1" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Row="1" Height="179" Width="{Binding ActualWidth, ElementName=grid, Mode=OneWay}" Grid.RowSpan="2" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button x:Name="Minus10SecButton" Content="&lt;&lt;" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="102" Click="Minus10SecButton_Click" Grid.RowSpan="2"/>
+            <Button x:Name="PlayButton" Content="Play" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="102" Click="PlayButton_Click" Grid.Column="1" Grid.RowSpan="2"/>
+            <Button x:Name="Plus10SecButton" Content="&gt;&gt;" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Click="Plus10SecButton_Click" Grid.Column="4" Grid.RowSpan="2" Width="100"/>
+            <Button x:Name="StopButton" Content="Stop" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="102" Click="StopButton_Click" Grid.Column="3" Grid.RowSpan="2"/>
+            <Button x:Name="PauseButton" Content="Pause" HorizontalAlignment="Left" Width="102" Click="PauseButton_Click" Grid.Column="2" Height="47" VerticalAlignment="Top" Grid.RowSpan="2"/>
+            <Slider HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="8" Height="45" Width="794"/>
+            <Label x:Name="Speed" Content="Speed:" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Top" Height="45" Width="101" FontSize="20"/>
+            <TextBox x:Name="SpeedTextBox" Grid.Column="6" HorizontalAlignment="Center" Height="20" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="82" Margin="10,15,10,10" KeyDown="SpeedTextBox_KeyDown"/>
+            <TextBox x:Name="TimeTextBox" Grid.Column="7" HorizontalAlignment="Center" Height="25" TextWrapping="Wrap" Text="00:00:00" VerticalAlignment="Center" Width="82" Margin="10,13,17,7"/>
+            <Button x:Name="OpenTrainButton" Content="Open&#xD;&#xA;Train" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="102" Click="OpenTrainButton_Click" Grid.RowSpan="2" RenderTransformOrigin="0.436,1.394" Margin="-2,0,0,0" Grid.Row="2"/>
+            <Button x:Name="OpenTestButton" Content="Open&#xA;Test" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="102" Click="OpenTestButton_Click" Grid.RowSpan="2" RenderTransformOrigin="0.436,1.394" Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="1"/>
+        </Grid>
+        <Grid HorizontalAlignment="Left" Height="285" Margin="0,10,0,0" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=grid, Mode=OneWay}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Image x:Name="planeImage" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="275" Margin="10,0,0,0" VerticalAlignment="Top" Width="476" Stretch="Fill" >
+                <Image.Source>
+                        C:\Users\WIN10\source\repos\ex1\fg.png
+                </Image.Source>
+            </Image>
+        </Grid>
     </Grid>
 </Window>
