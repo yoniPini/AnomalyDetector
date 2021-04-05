@@ -39,7 +39,7 @@ namespace ex1
                                 " --prop:/sim/view[1]/enabled=true --geometry=750x500" +
                                 " --telnet=socket,in,10,127.0.0.1," + telnetPort + ",tcp --disable-ai-models";
 
-            var psi = new ProcessStartInfo(this.fgPath + "\\fgfs.exe", FGargs);
+            var psi = new ProcessStartInfo(this.fgPath + "fgfs.exe", FGargs);
             psi.WorkingDirectory = this.fgPath;
             this.fgProcess = Process.Start(psi);
             this.fgProcess.Exited += delegate (object x, EventArgs e) { this.fgProcess = null; };

@@ -11,12 +11,26 @@ namespace ex1
 {
     public class FileDetails
     {
-        public string Path, Name;
-        public string FullPath { get { return Path + "\\" + Name; } }
-        public FileDetails(string Path, string Name)
+        // "C:\folder1\"      : with '\' at end
+        public readonly string OnlyPath;
+        // "readme"           : until the point
+        public readonly string NameWithoutExtension;
+        // "txt"              : without the point
+        public readonly string Extension;
+        // "readme.txt"
+        public string OnlyFullName { get { return NameWithoutExtension + "." + Extension; } }
+        // "C:\folder1\readme.txt"
+        public string FullPathAndName { get { return OnlyPath + OnlyFullName; } }
+        public override string ToString() { return FullPathAndName; }
+        public FileDetails(string fullPathAndName)
         {
-            this.Path = Path;
-            this.Name = Name;
+            String[] temp = fullPathAndName.Split('\\');
+            String fullName = temp[temp.Length - 1];
+            temp[temp.Length - 1] = "";
+            this.OnlyPath = String.Join("\\", temp);
+            temp = fullName.Split('.');
+            this.Extension = temp[temp.Length - 1];
+            this.NameWithoutExtension = fullName.Substring(0, fullName.Length - (this.Extension.Length + 1));
         }
     }
     class Utils
@@ -92,11 +106,9 @@ namespace ex1
             openFile.InitialDirectory = Environment.GetEnvironmentVariable("HomeDrive");
             openFile.Title = "Choose " + descriprion;
             openFile.ShowDialog();
-            string fullPath = openFile.FileName;
-            string[] temp = fullPath.Split('\\');
-            if (fullPath == "" || !openFile.CheckFileExists)
+            if (openFile.FileName == "" || !openFile.CheckFileExists)
                 return null;
-            return new FileDetails(fullPath + "\\..", temp[temp.Length - 1]);
+            return new FileDetails(openFile.FileName);
         }
     }
 }
