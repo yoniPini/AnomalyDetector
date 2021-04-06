@@ -99,16 +99,17 @@ namespace ex1
         }
 
         // example: var x = GetFileDetailsFromUserGUI("xml file", "*.xml");
-        public static FileDetails GetFileDetailsFromUserGUI(string descriprion, string extensionFilter)
+        // this is for basic use with one extension
+        public static String GetFilePathFromUserGUI(string descriprion, string extensionFilter)
         {
             Microsoft.Win32.OpenFileDialog openFile = new Microsoft.Win32.OpenFileDialog();
-            openFile.Filter = descriprion + "|" + extensionFilter;
+            openFile.Filter = descriprion + " (" + extensionFilter + ")|" + extensionFilter + "|All files (*.*)|*.*";
             openFile.InitialDirectory = Environment.GetEnvironmentVariable("HomeDrive");
             openFile.Title = "Choose " + descriprion;
             openFile.ShowDialog();
-            if (openFile.FileName == "" || !openFile.CheckFileExists)
-                return null;
-            return new FileDetails(openFile.FileName);
+            if (!openFile.CheckFileExists)
+                return "";
+            return openFile.FileName;
         }
     }
 }

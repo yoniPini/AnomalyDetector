@@ -8,7 +8,7 @@ using System.IO;
 
 namespace ex1
 {
-    class TableSeries
+    public class TableSeries
     {
         private float[][] tableValues;
         private string[] featuresStr;

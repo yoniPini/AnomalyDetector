@@ -79,6 +79,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FlightGearPlayerModel.cs" />
+    <Compile Include="FlightGearPlayerViewModel.cs" />
+    <Compile Include="IFlightGearPlayerModel.cs" />
+    <Compile Include="IFlightGearPlayerViewModel.cs" />
     <Compile Include="TableSeries.cs" />
     <Compile Include="Utils.cs" />
     <Page Include="MainWindow.xaml">
@@ -114,6 +118,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

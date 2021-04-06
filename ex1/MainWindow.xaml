@@ -1,11 +1,12 @@
-﻿<Window x:Name="window" x:Class="ex1.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ex1"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="window" x:Class="ex1.MainWindow"
         mc:Ignorable="d" Height="610" Width="867" Title="something">
-    <Grid x:Name="grid" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Height="{Binding ActualHeight, ElementName=window, Mode=OneWay}" Width="{Binding ActualWidth, ElementName=window, Mode=OneWay}">
+    <Grid x:Name="grid" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Height="561" Width="857">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="340*"/>
         </Grid.ColumnDefinitions>
@@ -14,7 +15,7 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid x:Name="grid1" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Row="1" Height="179" Width="{Binding ActualWidth, ElementName=grid, Mode=OneWay}" Grid.RowSpan="2" Grid.ColumnSpan="2">
+        <Grid x:Name="grid1" HorizontalAlignment="Left" Margin="0,10.333,0,0" VerticalAlignment="Top" Grid.Row="1" Height="130" Width="{Binding ActualWidth, ElementName=grid, Mode=OneWay}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -36,12 +37,18 @@
             <Button x:Name="Plus10SecButton" Content="&gt;&gt;" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Click="Plus10SecButton_Click" Grid.Column="4" Grid.RowSpan="2" Width="100"/>
             <Button x:Name="StopButton" Content="Stop" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="102" Click="StopButton_Click" Grid.Column="3" Grid.RowSpan="2"/>
             <Button x:Name="PauseButton" Content="Pause" HorizontalAlignment="Left" Width="102" Click="PauseButton_Click" Grid.Column="2" Height="47" VerticalAlignment="Top" Grid.RowSpan="2"/>
-            <Slider HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="8" Height="45" Width="794"/>
+            <Slider HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="8" Height="45" Width="794" Margin="0,20.333,0,0" Grid.RowSpan="2"/>
             <Label x:Name="Speed" Content="Speed:" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Top" Height="45" Width="101" FontSize="20"/>
-            <TextBox x:Name="SpeedTextBox" Grid.Column="6" HorizontalAlignment="Center" Height="20" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="82" Margin="10,15,10,10" KeyDown="SpeedTextBox_KeyDown"/>
             <TextBox x:Name="TimeTextBox" Grid.Column="7" HorizontalAlignment="Center" Height="25" TextWrapping="Wrap" Text="00:00:00" VerticalAlignment="Center" Width="82" Margin="10,13,17,7"/>
-            <Button x:Name="OpenTrainButton" Content="Open&#xD;&#xA;Train" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="102" Click="OpenTrainButton_Click" Grid.RowSpan="2" RenderTransformOrigin="0.436,1.394" Margin="-2,0,0,0" Grid.Row="2"/>
-            <Button x:Name="OpenTestButton" Content="Open&#xA;Test" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="102" Click="OpenTestButton_Click" Grid.RowSpan="2" RenderTransformOrigin="0.436,1.394" Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="1"/>
+            <ComboBox x:Name="SpeedComboBox" Grid.ColumnSpan="2" Grid.Column="5" HorizontalAlignment="Left" Margin="80.333,11,0,0" VerticalAlignment="Top" Width="52" SelectedItem="{Binding FG_Player_VM.VM_SpeedTimes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="2" Grid.RowSpan="2">
+                <System:String>0.25</System:String>
+                <System:String>0.5</System:String>
+                <System:String>1</System:String>
+                <System:String>2</System:String>
+                <System:String>3</System:String>
+                <System:String>4</System:String>
+                <System:String>5</System:String>
+            </ComboBox>
         </Grid>
         <Grid HorizontalAlignment="Left" Height="285" Margin="10,10,0,0" VerticalAlignment="Top" Width="847">
             <Grid.ColumnDefinitions>
@@ -53,9 +60,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Slider x:Name="rudderSlider" Grid.Column="4" HorizontalAlignment="Left" Margin="71,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="7.583,0.056" Grid.ColumnSpan="3" Width="282" BorderThickness="0" Foreground="#FF0F08B0" BorderBrush="#FF030D68" Background="#FF92DCF1" OpacityMask="#FF851A1A" IsEnabled="False">
-
-            </Slider>
+            <Slider x:Name="rudderSlider" Grid.Column="4" HorizontalAlignment="Left" Margin="71,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="7.583,0.056" Grid.ColumnSpan="3" Width="282" BorderThickness="0" Foreground="#FF0F08B0" BorderBrush="#FF030D68" Background="#FF92DCF1" OpacityMask="#FF851A1A" IsEnabled="False"/>
             <Slider x:Name="throttleSlider" Grid.Column="3" HorizontalAlignment="Right" Margin="0,153,74,0" VerticalAlignment="Top" Width="239" Grid.ColumnSpan="3" RenderTransformOrigin="0.467,-1.373" Background="#FFF1CAF8" BorderThickness="0">
 
                 <Slider.RenderTransform>
@@ -83,5 +88,17 @@
                 </Ellipse.Fill>
             </Ellipse>
         </Grid>
+        <TextBox x:Name="FG_Path_TextBox" HorizontalAlignment="Left" Height="22" Margin="177,9.667,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="589" IsReadOnly="True" IsUndoEnabled="False" Text="{Binding FG_Player_VM.VM_FG_Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Content="Flight Gear path :" HorizontalAlignment="Left" Margin="10,5.667,0,0" Grid.Row="2" VerticalAlignment="Top" Width="146"/>
+        <Button x:Name="FG_Path_Button" Content="..." HorizontalAlignment="Left" Margin="782,9.667,0,0" Grid.Row="2" VerticalAlignment="Top" Width="42" Click="FG_Path_Button_Click"/>
+        <TextBox x:Name="XML_Path_TextBox" HorizontalAlignment="Left" Height="22" Margin="177,39.667,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="589" IsReadOnly="True" IsUndoEnabled="False" Text="{Binding FG_Player_VM.VM_XML_Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Content="Flight Recoerd Protocol :" HorizontalAlignment="Left" Margin="10,35.667,0,0" Grid.Row="2" VerticalAlignment="Top" Width="146"/>
+        <Button x:Name="XML_Path_Button" Content="..." HorizontalAlignment="Left" Margin="782,39.667,0,0" Grid.Row="2" VerticalAlignment="Top" Width="42" Click="XML_Path_Button_Click"/>
+        <TextBox x:Name="LearnCsv_Path_TextBox" HorizontalAlignment="Left" Height="22" Margin="177,70.667,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="589" IsReadOnly="True" IsUndoEnabled="False" Text="{Binding FG_Player_VM.VM_LearnCsv_Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Content="Normal Flight path :" HorizontalAlignment="Left" Margin="10,66.667,0,0" Grid.Row="2" VerticalAlignment="Top" Width="146"/>
+        <Button x:Name="LearnCsv_Path_Button" Content="..." HorizontalAlignment="Left" Margin="782,70.667,0,0" Grid.Row="2" VerticalAlignment="Top" Width="42" Click="LearnCsv_Path_Button_Click"/>
+        <TextBox x:Name="TestCsv_Path_TextBox" HorizontalAlignment="Left" Height="22" Margin="177,99.667,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="589" IsReadOnly="True" IsUndoEnabled="False" Text="{Binding FG_Player_VM.VM_TestCsv_Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Content="Test \ Current Flight path :" HorizontalAlignment="Left" Margin="10,95.667,0,0" Grid.Row="2" VerticalAlignment="Top" Width="146"/>
+        <Button x:Name="TestCsv_Path_Button" Content="..." HorizontalAlignment="Left" Margin="782,99.667,0,0" Grid.Row="2" VerticalAlignment="Top" Width="42" Click="TestCsv_Path_Button_Click"/>
     </Grid>
 </Window>

@@ -24,9 +24,9 @@ namespace ex1
 
         public event action OnFGClosing;
 
-        public FgAdapter(string fgPath)
+        public FgAdapter(string fgDirPath)
         {
-            this.fgPath = fgPath;
+            this.fgPath = fgDirPath;
         }
 
         public bool Start(string protocolName, int dataPort = 5400, int telnetPort = 5402)
