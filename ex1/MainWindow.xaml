@@ -32,14 +32,14 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Button x:Name="Minus10SecButton" Content="&lt;&lt;" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="102" Click="Minus10SecButton_Click" Grid.RowSpan="2"/>
-            <Button x:Name="PlayButton" Content="Play" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="102" Click="PlayButton_Click" Grid.Column="1" Grid.RowSpan="2"/>
-            <Button x:Name="Plus10SecButton" Content="&gt;&gt;" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Click="Plus10SecButton_Click" Grid.Column="4" Grid.RowSpan="2" Width="100"/>
-            <Button x:Name="StopButton" Content="Stop" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="102" Click="StopButton_Click" Grid.Column="3" Grid.RowSpan="2"/>
-            <Button x:Name="PauseButton" Content="Pause" HorizontalAlignment="Left" Width="102" Click="PauseButton_Click" Grid.Column="2" Height="47" VerticalAlignment="Top" Grid.RowSpan="2"/>
-            <Slider HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="8" Height="45" Width="794" Margin="0,20.333,0,0" Grid.RowSpan="2"/>
+            <Button x:Name="Minus10SecButton" Content="&lt;&lt;" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="102" Click="Minus10SecButton_Click" Grid.RowSpan="2" IsEnabled="{Binding FG_Player_VM.VM_IsRunning, Mode=OneWay}"/>
+            <Button x:Name="PlayButton" Content="Play" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="102" Click="PlayButton_Click" Grid.Column="1" Grid.RowSpan="2" IsEnabled="{Binding FG_Player_VM.VM_IsPaused, Mode=OneWay}"/>
+            <Button x:Name="Plus10SecButton" Content="&gt;&gt;" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Click="Plus10SecButton_Click" Grid.Column="4" Grid.RowSpan="2" Width="100" IsEnabled="{Binding FG_Player_VM.VM_IsRunning, Mode=OneWay}"/>
+            <Button x:Name="StopButton" Content="Stop" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="102" Click="StopButton_Click" Grid.Column="3" Grid.RowSpan="2" IsEnabled="{Binding FG_Player_VM.VM_IsRunning, Mode=OneWay}"/>
+            <Button x:Name="PauseButton" Content="Pause" HorizontalAlignment="Left" Width="102" Click="PauseButton_Click" Grid.Column="2" Height="47" VerticalAlignment="Top" Grid.RowSpan="2" IsEnabled="{Binding FG_Player_VM.VM_IsRunning, Mode=OneWay}"/>
+            <Slider HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="8" Height="45" Width="794" Margin="0,20.333,0,0" Grid.RowSpan="2" SmallChange="1" Value="{Binding FG_Player_VM.VM_CurrentTimeStep, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="{Binding FG_Player_VM.VM_MaxTimeStep}"/>
             <Label x:Name="Speed" Content="Speed:" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Top" Height="45" Width="101" FontSize="20"/>
-            <TextBox x:Name="TimeTextBox" Grid.Column="7" HorizontalAlignment="Center" Height="25" TextWrapping="Wrap" Text="00:00:00" VerticalAlignment="Center" Width="82" Margin="10,13,17,7"/>
+            <TextBox x:Name="TimeTextBox" Grid.Column="6" HorizontalAlignment="Center" Height="25" TextWrapping="Wrap" Text="{Binding FG_Player_VM.VM_CurrentTimeInStr, Mode=OneWay}" VerticalAlignment="Center" Width="82" Margin="59.333,9,73.333,31.333" IsEnabled="False" Grid.RowSpan="2" Grid.ColumnSpan="2" FontSize="15"/>
             <ComboBox x:Name="SpeedComboBox" Grid.ColumnSpan="2" Grid.Column="5" HorizontalAlignment="Left" Margin="80.333,11,0,0" VerticalAlignment="Top" Width="52" SelectedItem="{Binding FG_Player_VM.VM_SpeedTimes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="2" Grid.RowSpan="2">
                 <System:String>0.25</System:String>
                 <System:String>0.5</System:String>
@@ -49,8 +49,9 @@
                 <System:String>4</System:String>
                 <System:String>5</System:String>
             </ComboBox>
+            <Button Grid.ColumnSpan="2" Content="Debug" Grid.Column="3" HorizontalAlignment="Left" Height="32" Margin="102,22.667,0,0" Grid.Row="2" Grid.RowSpan="2" VerticalAlignment="Top" Width="102" Click="Button_Click"/>
         </Grid>
-        <Grid HorizontalAlignment="Left" Height="285" Margin="10,10,0,0" VerticalAlignment="Top" Width="847">
+        <Grid HorizontalAlignment="Left" Height="271" Margin="10,10,0,0" VerticalAlignment="Top" Width="847" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -61,7 +62,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Slider x:Name="rudderSlider" Grid.Column="4" HorizontalAlignment="Left" Margin="71,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="7.583,0.056" Grid.ColumnSpan="3" Width="282" BorderThickness="0" Foreground="#FF0F08B0" BorderBrush="#FF030D68" Background="#FF92DCF1" OpacityMask="#FF851A1A" IsEnabled="False"/>
-            <Slider x:Name="throttleSlider" Grid.Column="3" HorizontalAlignment="Right" Margin="0,153,74,0" VerticalAlignment="Top" Width="239" Grid.ColumnSpan="3" RenderTransformOrigin="0.467,-1.373" Background="#FFF1CAF8" BorderThickness="0">
+            <Slider x:Name="throttleSlider" Grid.Column="3" HorizontalAlignment="Right" Margin="0,153,74,0" VerticalAlignment="Top" Width="239" Grid.ColumnSpan="3" RenderTransformOrigin="0.467,-1.373" Background="#FFF1CAF8" BorderThickness="0" IsEnabled="False">
 
                 <Slider.RenderTransform>
                     <TransformGroup>

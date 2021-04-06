@@ -17,12 +17,14 @@ namespace ex1
         bool IsRunning { get; set; }
         bool IsPaused { get; set; } // opposite of the above
         int CurrentTimeStep { get; set; } // 950 for example
+        int MaxTimeStep { get; } // including the return value
         String CurrentTimeInStr { get; } // "00:01:35 for example"
         double SpeedTimes { get; set; } // 1.5 = "x1.5" speed
+        TableSeries Table { get; }
 
-        //void Play();
-        // INotifyPropertyChanged:
-        // event PropertyChangedEventHandler PropertyChanged;
+            //void Play();
+            // INotifyPropertyChanged:
+            // event PropertyChangedEventHandler PropertyChanged;
 
-    }
+        }
 }

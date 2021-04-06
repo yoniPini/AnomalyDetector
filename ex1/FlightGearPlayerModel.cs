@@ -33,13 +33,13 @@ namespace ex1
         private int currTimeStep;
         public int CurrentTimeStep { get { return currTimeStep; } 
             set { 
-                if (value < 0 || (ts != null && value >= ts.RowsLength))
-                {
-                    this.IsPaused = true;
-                    return;
-                }
-                currTimeStep = value; 
+                currTimeStep = Math.Min(MaxTimeStep, Math.Max(0, value)); 
                 NotifyPropertyChanged("CurrentTimeStep", "CurrentTimeInStr"); } } // 95 for example
+        public int MaxTimeStep { get { 
+                if(ts != null)
+                    return ts.RowsLength - 1;
+                return 0;
+            } } // including the return value
         private String TwoDigitsRepr(int x)
         {
             if (x == 0) return "00";
@@ -104,6 +104,7 @@ namespace ex1
                                                        this.fgAdapter = null;
                                                     };
                 ts = new TableSeries(this.TestCsv_Path, Utils.ParseFeaturesLine(this.XML_Path));
+                NotifyPropertyChanged("MaxTimeStep");
             }
             UpdateSpeed();
             timer.Start();

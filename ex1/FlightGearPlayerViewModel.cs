@@ -26,6 +26,7 @@ namespace ex1
         public bool VM_IsPaused { get { return !VM_IsRunning; } set { VM_IsRunning = !value; } } // opposite of the above
 
         public int VM_CurrentTimeStep { get { return model.CurrentTimeStep; } set { model.CurrentTimeStep = value; } }
+        public int VM_MaxTimeStep { get { return model.MaxTimeStep; } }
         public String VM_CurrentTimeInStr { get { return model.CurrentTimeInStr; } }
         public double VM_SpeedTimes
         {

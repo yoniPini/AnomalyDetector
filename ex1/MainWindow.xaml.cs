@@ -53,7 +53,7 @@ namespace ex1
 
         private void Minus10SecButton_Click(object sender, RoutedEventArgs e)
         {
-
+            this.FG_Player_VM.VM_CurrentTimeStep -= 100;
         }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
@@ -63,22 +63,18 @@ namespace ex1
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
-
+            this.FG_Player_VM.VM_IsPaused = true;
+            this.FG_Player_VM.VM_CurrentTimeStep = 0;
         }
 
         private void Plus10SecButton_Click(object sender, RoutedEventArgs e)
         {
-            //this is only to be fast:
-            this.FG_Path_TextBox.Text = @"C:\Program Files\FlightGear_2020.3.6\bin\fgfs.exe";
-            this.LearnCsv_Path_TextBox.Text = @"C:\Users\EhudV\Desktop\ap2_ex1\reg_flight.csv";
-            this.TestCsv_Path_TextBox.Text = @"C:\Users\EhudV\Desktop\ap2_ex1\reg_flight.csv";
-            this.XML_Path_TextBox.Text = @"C:\Users\EhudV\Desktop\ap2_ex1\playback_small.xml";
-            MessageBox.Show(this.FG_Player_VM.VM_SpeedTimes.ToString());
+            this.FG_Player_VM.VM_CurrentTimeStep += 100;
         }
 
         private void PauseButton_Click(object sender, RoutedEventArgs e)
         {
-
+            this.FG_Player_VM.VM_IsPaused = true;
         }
 
         private void FG_Path_Button_Click(object sender, RoutedEventArgs e)
@@ -106,5 +102,14 @@ namespace ex1
                 Utils.GetFilePathFromUserGUI("Flight recording file", "*.csv;*.txt;*.log");
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //this is only to be fast:
+            this.FG_Path_TextBox.Text = @"C:\Program Files\FlightGear_2020.3.6\bin\fgfs.exe";
+            this.LearnCsv_Path_TextBox.Text = @"C:\Users\EhudV\Desktop\ap2_ex1\reg_flight.csv";
+            this.TestCsv_Path_TextBox.Text = @"C:\Users\EhudV\Desktop\ap2_ex1\reg_flight.csv";
+            this.XML_Path_TextBox.Text = @"C:\Users\EhudV\Desktop\ap2_ex1\playback_small.xml";
+            //MessageBox.Show(this.FG_Player_VM.VM_SpeedTimes.ToString());
+        }
     }
 }
