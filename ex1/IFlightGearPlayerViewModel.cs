@@ -8,6 +8,7 @@ namespace ex1
 {
     public interface IFlightGearPlayerViewModel : INotifyPropertyChanged
     {
+        double Const_OriginalHz { get; }
         string VM_FG_Path { get; set; }
         string VM_XML_Path { get; set; }
         string VM_LearnCsv_Path { get; set; }

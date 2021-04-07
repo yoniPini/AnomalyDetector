@@ -10,6 +10,7 @@ namespace ex1
 {
     public class FlightGearPlayerModel : IFlightGearPlayerModel
     {
+        public double Const_OriginalHz { get { return 10.00; } }
         // only binding from model view -> model :
         public string FG_Path { get; set; }
         public string XML_Path { get; set; }
@@ -48,7 +49,7 @@ namespace ex1
         }
         public String CurrentTimeInStr { get {
                 int curr = CurrentTimeStep;
-                int currSec = curr / 10;
+                int currSec = curr / (int)Const_OriginalHz;
                 int currMin = currSec / 60;
                 int currHour = currMin / 60;
                 currSec = currSec % 60;
@@ -81,10 +82,10 @@ namespace ex1
         }
         private void UpdateSpeed()
         {
-            int framesPerSeconds = Math.Max((int)(10 * this.SpeedTimes), 1);
-            int timeBetweenFrames = 1000 / framesPerSeconds;
-            if (timer != null)
-                this.timer.Interval = timeBetweenFrames;
+            if (timer == null) return;
+            double framesPerSeconds = Math.Max((Const_OriginalHz * this.SpeedTimes), 1);
+            double timeBetweenFrames = 1000 / framesPerSeconds;
+            this.timer.Interval = timeBetweenFrames;
         }
         public void Play() {
             if (timer == null || fgAdapter == null || ts == null)

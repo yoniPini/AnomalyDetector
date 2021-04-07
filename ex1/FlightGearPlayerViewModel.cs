@@ -9,6 +9,7 @@ namespace ex1
 {
     public class FlightGearPlayerViewModel : IFlightGearPlayerViewModel
     {
+        public double Const_OriginalHz { get { return model.Const_OriginalHz; } }
         public string VM_FG_Path { get { return model.FG_Path; } set { model.FG_Path = value; } } 
         public string VM_XML_Path { get { return model.XML_Path; } set { model.XML_Path = value; } }
         public string VM_LearnCsv_Path { get { return model.LearnCsv_Path; } set { model.LearnCsv_Path = value; } }

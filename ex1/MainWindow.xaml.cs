@@ -51,7 +51,7 @@ namespace ex1
 
         private void Minus10SecButton_Click(object sender, RoutedEventArgs e)
         {
-            this.FG_Player_VM.VM_CurrentTimeStep -= 100;
+            this.FG_Player_VM.VM_CurrentTimeStep -= (int)(10 * FG_Player_VM.Const_OriginalHz);
         }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
@@ -67,7 +67,7 @@ namespace ex1
 
         private void Plus10SecButton_Click(object sender, RoutedEventArgs e)
         {
-            this.FG_Player_VM.VM_CurrentTimeStep += 100;
+            this.FG_Player_VM.VM_CurrentTimeStep += (int)(10 * FG_Player_VM.Const_OriginalHz);
         }
 
         private void PauseButton_Click(object sender, RoutedEventArgs e)

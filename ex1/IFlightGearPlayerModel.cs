@@ -10,6 +10,7 @@ namespace ex1
 {
     public interface IFlightGearPlayerModel : INotifyPropertyChanged
     {
+        double Const_OriginalHz { get; }
         string FG_Path { get; set; }
         string XML_Path { get; set; }
         string LearnCsv_Path { get; set; }
