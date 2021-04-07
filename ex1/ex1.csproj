@@ -81,10 +81,12 @@
     </ApplicationDefinition>
     <Compile Include="FlightGearPlayerModel.cs" />
     <Compile Include="FlightGearPlayerViewModel.cs" />
+    <Compile Include="IAnomalyGraphModel.cs" />
     <Compile Include="IFlightGearPlayerModel.cs" />
     <Compile Include="IFlightGearPlayerViewModel.cs" />
     <Compile Include="IJoystickModel.cs" />
     <Compile Include="IJoystickViewModel.cs" />
+    <Compile Include="IAnomalyDetectorsManager.cs" />
     <Compile Include="JoystickModel.cs" />
     <Compile Include="JoystickViewModel.cs" />
     <Compile Include="TableSeries.cs" />

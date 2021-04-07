@@ -4,10 +4,11 @@ using System.Reflection;
 using DLL;
 namespace ex1
 {
-    class AnomalyDetectorsManager
+    public class AnomalyDetectorsManager : IAnomalyDetectorsManager
     {
         private List<IAnomalyDetector> detectors = new List<IAnomalyDetector>();
-        public List<IAnomalyDetector> Detctors { get { return this.detectors; } }
+        public List<IAnomalyDetector> Detectors { get { return this.detectors; } }
+        public int CurrentDetectorIdx { get; set; }
         public IAnomalyDetector AddAnomalyDetector(string fromDllPath)
         {
             try

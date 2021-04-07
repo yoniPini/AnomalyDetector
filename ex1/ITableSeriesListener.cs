@@ -11,9 +11,14 @@ namespace ex1
     {
         //public TableSeries operator[int i];
         //float this[string x] { get { return 0; } }
-        float get(string feature);
-        // note INotifyPropertyChanged doesnt work well for containers [property which contains properties]
-        Dictionary<string, float> Features { get; } 
+        //float get(string feature);
+        // note INotifyPropertyChanged may not work well for collection\containers [property which contains properties]
+        Dictionary<string, float> FeaturesValue { get; } 
+        // changes only within the instance ref:
+        List<string> AllFeaturesList { get; }
+        //string SelectedFeature { get; set; }
+
+        // sAllFeaturesList { get; } 
         // INotifyPropertyChanged:
         // event PropertyChangedEventHandler PropertyChanged;
     }
