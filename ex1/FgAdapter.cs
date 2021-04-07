@@ -42,34 +42,39 @@ namespace ex1
             var psi = new ProcessStartInfo(this.fgPath + "fgfs.exe", FGargs);
             psi.WorkingDirectory = this.fgPath;
             this.fgProcess = Process.Start(psi);
+            this.fgProcess.EnableRaisingEvents = true;
             this.fgProcess.Exited += delegate (object x, EventArgs e) { this.fgProcess = null; };
-            this.fgProcess.Exited += delegate (object x, EventArgs e) { this.Close(); };
+            this.fgProcess.Exited += delegate (object x, EventArgs e) { this.Close(); this.OnFGClosing?.Invoke(); };
             this.fgTcp = new FgTcp();
 
-            return this.fgTcp.Init(dataPort, telnetPort);
+            return this.fgTcp?.Init(dataPort, telnetPort) ?? false;
         }
 
         public bool SendPlayback(string line)
         {
-            return this.fgTcp.SendPlayback(line);
+            return this.fgTcp?.SendPlayback(line) ?? false;
         }
 
         public void Close()
         {
-            this.Close(false);
+            this.Close(true);
         }
 
         public void Close(bool alsoCloseFgWin)
         {
-            this.fgTcp.Close();
+            this.fgTcp?.Close();
             this.fgTcp = null;
             if (alsoCloseFgWin)
             {
-                this.fgProcess?.Kill();
-                this.fgProcess?.Dispose();
+                try
+                {
+                    this.fgProcess?.Kill();
+                    this.fgProcess?.Dispose();
+                }
+                catch { }
                 this.fgProcess = null;
             }
-            this.OnFGClosing();
+            
         }
     }
 }

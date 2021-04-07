@@ -61,8 +61,8 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Slider x:Name="rudderSlider" Grid.Column="4" HorizontalAlignment="Left" Margin="71,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="7.583,0.056" Grid.ColumnSpan="3" Width="282" BorderThickness="0" Foreground="#FF0F08B0" BorderBrush="#FF030D68" Background="#FF92DCF1" OpacityMask="#FF851A1A" IsEnabled="False"/>
-            <Slider x:Name="throttleSlider" Grid.Column="3" HorizontalAlignment="Right" Margin="0,153,74,0" VerticalAlignment="Top" Width="239" Grid.ColumnSpan="3" RenderTransformOrigin="0.467,-1.373" Background="#FFF1CAF8" BorderThickness="0" IsEnabled="False">
+            <Slider x:Name="rudderSlider" Grid.Column="4" HorizontalAlignment="Left" Margin="71.333,246,0,0" VerticalAlignment="Top" RenderTransformOrigin="7.583,0.056" Grid.ColumnSpan="3" Width="282" BorderThickness="0" Foreground="#FF0F08B0" BorderBrush="#FF030D68" Background="#FF92DCF1" OpacityMask="#FF851A1A" IsEnabled="False" Maximum="1" Minimum="-1" Value="{Binding Joystick_VM.VM_rudder, Mode=OneWay}"/>
+            <Slider x:Name="throttleSlider" Grid.Column="3" HorizontalAlignment="Right" Margin="0,130,75,0" VerticalAlignment="Top" Width="239" Grid.ColumnSpan="3" RenderTransformOrigin="0.467,-1.373" Background="#FFF1CAF8" BorderThickness="0" IsEnabled="False" Maximum="1" Value="{Binding Joystick_VM.VM_throttle, Mode=OneWay}">
 
                 <Slider.RenderTransform>
                     <TransformGroup>
@@ -73,8 +73,8 @@
                     </TransformGroup>
                 </Slider.RenderTransform>
             </Slider>
-            <Ellipse x:Name="Joystick_BigCircle" Grid.ColumnSpan="3" Grid.Column="4" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="217" Margin="96,44,0,0" Stroke="Black" VerticalAlignment="Top" Width="222"/>
-            <Ellipse x:Name="Joystick_SmallCircle" Grid.Column="5" HorizontalAlignment="Left" Height="60" Margin="58.667,124,0,0" VerticalAlignment="Top" Width="62" RenderTransformOrigin="1.065,1.083" StrokeThickness="6">
+            <Ellipse x:Name="Joystick_BigCircle" Grid.ColumnSpan="3" Grid.Column="4" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="{Binding Joystick_VM.VM_Height_BigCircle, Mode=OneWayToSource, FallbackValue='200'}" Margin="{Binding Joystick_VM.VM_Margin_BigCircle, Mode=OneWayToSource, FallbackValue='110,20,0,0'}" Stroke="Black" VerticalAlignment="Top" Width="{Binding Joystick_VM.VM_Width_BigCircle, Mode=OneWayToSource, FallbackValue='200'}"/>
+            <Ellipse x:Name="Joystick_SmallCircle" Grid.Column="4" HorizontalAlignment="Left" Height="{Binding Joystick_VM.VM_Height_SmallCircle, Mode=OneWayToSource, FallbackValue='60'}" Margin="{Binding Joystick_VM.VM_Margin_SmallCircle, Mode=OneWay, FallbackValue='180,90,0,0'}" VerticalAlignment="Top" Width="{Binding Joystick_VM.VM_Width_SmallCircle, Mode=OneWayToSource, FallbackValue='60'}" RenderTransformOrigin="1.065,1.083" StrokeThickness="6" Grid.ColumnSpan="3">
                 <Ellipse.Stroke>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="Black" Offset="0.576"/>

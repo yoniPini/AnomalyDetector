@@ -24,23 +24,21 @@ namespace ex1
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        // assuming throttleSlider value is [0,1]
+        // assuming rudderSlider value is [-1, 1]
         public event PropertyChangedEventHandler PropertyChanged;
         public IFlightGearPlayerViewModel FG_Player_VM { get; }
+        public IJoystickViewModel Joystick_VM { get; }
+        private IFlightGearPlayerModel fgModel;
         public MainWindow()
         {
-            this.FG_Player_VM = new FlightGearPlayerViewModel(new FlightGearPlayerModel());
+            this.fgModel = new FlightGearPlayerModel();
+            this.FG_Player_VM = new FlightGearPlayerViewModel(fgModel);
+            this.Joystick_VM = new JoystickViewModel(new JoystickModel(fgModel));
             InitializeComponent();
             DataContext = this;
-
+            this.Closed += delegate (object sender, EventArgs e) { fgModel.CloseFG(); };
             
-
-
-
-            //AnomalyDetectorsManager y = new AnomalyDetectorsManager();
-            //DLL.IAnomalyDetector x = y.AddAnomalyDetector(Utils.GetFileDetailsFromUserGUI(
-               // "anomaly file", "*.dll").FullPath);
-            //MessageBox.Show(Utils.ParseFeaturesLine(Utils.GetFileDetailsFromUserGUI(
-             //   "protocol file", "*.xml").FullPath));
         }
         
         private void SpeedTextBox_KeyDown(object sender, KeyEventArgs e)
@@ -110,6 +108,10 @@ namespace ex1
             this.TestCsv_Path_TextBox.Text = @"C:\Users\EhudV\Desktop\ap2_ex1\reg_flight.csv";
             this.XML_Path_TextBox.Text = @"C:\Users\EhudV\Desktop\ap2_ex1\playback_small.xml";
             //MessageBox.Show(this.FG_Player_VM.VM_SpeedTimes.ToString());
+            //MessageBox.Show(this.Joystick_SmallCircle.ActualHeight.ToString());
+            //var x = this.Joystick_SmallCircle.Margin;
+            //this.Joystick_SmallCircle.Margin = new Thickness(x.Left-15,x.Top, 0, 0);
+            // this.Joystick_SmallCircle.TransformToAncestor(this).Transform(new Point(9,-9));
         }
     }
 }

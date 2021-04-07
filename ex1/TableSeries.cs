@@ -49,8 +49,16 @@ namespace ex1
                 this.featuresStr = featuresLine.Split(',');
                 this.featuresToInt = new Dictionary<string, int>();
                 for (int k = 0; k < this.featuresStr.Length; k++)
+                {
                     if (!this.featuresToInt.ContainsKey(this.featuresStr[k]))
                         this.featuresToInt.Add(this.featuresStr[k], k);
+                    String without0 = featuresStr[k];
+                    if (without0.Length > 3 && without0.Substring(without0.Length - 3) == "[0]") {
+                        without0 = without0.Substring(0, without0.Length - 3);
+                        if (!this.featuresToInt.ContainsKey(without0))
+                            this.featuresToInt.Add(without0, k);
+                    }
+                }
 
                 this.timeStepsStr = new string[valuesLinesNumber];
                 this.tableValues = new float[valuesLinesNumber][];

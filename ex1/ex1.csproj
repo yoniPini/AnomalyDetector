@@ -83,6 +83,10 @@
     <Compile Include="FlightGearPlayerViewModel.cs" />
     <Compile Include="IFlightGearPlayerModel.cs" />
     <Compile Include="IFlightGearPlayerViewModel.cs" />
+    <Compile Include="IJoystickModel.cs" />
+    <Compile Include="IJoystickViewModel.cs" />
+    <Compile Include="JoystickModel.cs" />
+    <Compile Include="JoystickViewModel.cs" />
     <Compile Include="TableSeries.cs" />
     <Compile Include="Utils.cs" />
     <Page Include="MainWindow.xaml">

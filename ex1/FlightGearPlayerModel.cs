@@ -100,7 +100,7 @@ namespace ex1
                     if (e.PropertyName == "CurrentTimeStep")
                     this.fgAdapter?.SendPlayback(ts.getRowAsString(CurrentTimeStep));
                 };
-                fgAdapter.OnFGClosing += delegate () { this.IsPaused = true; this.fgAdapter.Close();
+                fgAdapter.OnFGClosing += delegate () { this.IsPaused = true;
                                                        this.fgAdapter = null;
                                                     };
                 ts = new TableSeries(this.TestCsv_Path, Utils.ParseFeaturesLine(this.XML_Path));
@@ -114,6 +114,10 @@ namespace ex1
 
         public void Pause() {
             timer?.Stop();
+        }
+        public void CloseFG()
+        {
+            this.fgAdapter?.Close(true);
         }
     }
 }

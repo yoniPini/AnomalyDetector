@@ -21,7 +21,7 @@ namespace ex1
         String CurrentTimeInStr { get; } // "00:01:35 for example"
         double SpeedTimes { get; set; } // 1.5 = "x1.5" speed
         TableSeries Table { get; }
-
+        void CloseFG();
             //void Play();
             // INotifyPropertyChanged:
             // event PropertyChangedEventHandler PropertyChanged;
