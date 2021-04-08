@@ -106,7 +106,6 @@ namespace ex1
                 timer = new Timer();
                 timer.Elapsed += delegate (object sender, ElapsedEventArgs e) {
                     this.CurrentTimeStep++; };
-
                 fgAdapter = new FgAdapter(new FileDetails(this.FG_Path).OnlyPath);
                 fgAdapter.Start(new FileDetails(this.XML_Path).NameWithoutExtension);
                 this.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
