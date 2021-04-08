@@ -9,6 +9,7 @@ using System.ComponentModel;
 using OxyPlot.Series;
 using OxyPlot;
 using OxyPlot.Axes;
+
 namespace ex1
 {
     public interface IOxyViewModel : INotifyPropertyChanged
@@ -19,7 +20,8 @@ namespace ex1
         // view :MainWindow -> SetUp(oxyViewModel)
         LineSeries Ls { get; }
         //in the IMPLEMENTATION : private IAnomalyGraphModel graphModel;
-        ScatterSeries Scs { get; }
+        ScatterSeries Normal { get; }
+        ScatterSeries ANormal { get; }
         LinearAxis BottomAxis { get; }
         LinearAxis LeftAxis { get; }
         String LegendTitle { get; }

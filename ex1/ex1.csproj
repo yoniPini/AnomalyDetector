@@ -99,6 +99,7 @@
     <Compile Include="IOxyViewModel.cs" />
     <Compile Include="JoystickModel.cs" />
     <Compile Include="JoystickViewModel.cs" />
+    <Compile Include="OxyViewModel.cs" />
     <Compile Include="TableSeries.cs" />
     <Compile Include="ITableSeriesListener.cs" />
     <Compile Include="Utils.cs" />
