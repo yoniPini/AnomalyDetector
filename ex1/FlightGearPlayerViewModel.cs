@@ -50,11 +50,27 @@ namespace ex1
         }
         public void Play()
         {
-            if (this.VM_FG_Path != "" && this.VM_XML_Path != "" &&
-                        this.VM_LearnCsv_Path != "" && this.VM_TestCsv_Path != "")
-                this.model.IsRunning = true;
-            else
+            if (this.VM_FG_Path == "" || this.VM_XML_Path == "" ||
+                        this.VM_LearnCsv_Path == "" || this.VM_TestCsv_Path == "")
+            {
                 System.Windows.MessageBox.Show("Please fill all the 4 paths below.");
+                return;
+            }
+            var fgMainFolder = new FileDetails(VM_FG_Path).OnlyPath + "..\\";
+            var protocolsFolder = fgMainFolder + @"data\Protocol\";
+            var xml = new FileDetails(VM_XML_Path);
+            if (!System.IO.File.Exists(protocolsFolder + xml.OnlyFullName))
+            {
+                System.Windows.MessageBox.Show("Please Copy the xml file to the fg protocol folder.", "Alert");
+                try
+                {
+                    System.Diagnostics.Process.Start("explorer.exe", '\"' + xml.OnlyPath + '\"');
+                    System.Diagnostics.Process.Start("explorer.exe", '\"' + protocolsFolder + '\"');
+                }
+                catch { }
+                return;
+            }
+            this.model.IsRunning = true;
         }
     }
 }

@@ -29,14 +29,38 @@ namespace ex1
         public event PropertyChangedEventHandler PropertyChanged;
         public IFlightGearPlayerViewModel FG_Player_VM { get; }
         public IJoystickViewModel Joystick_VM { get; }
-        private IFlightGearPlayerModel fgModel;
+        public ITableSeriesListener TableListener { get; }
+        public IAnomalySelectViewModel AnomalySelect_VM { get; }
         public MainWindow()
         {
-            this.fgModel = new FlightGearPlayerModel();
+            var fgModel = new FlightGearPlayerModel();
+            var anomalyGraphModel = new AnomalyGraphModel(fgModel, new AnomalyDetectorsManager());
+
             this.FG_Player_VM = new FlightGearPlayerViewModel(fgModel);
             this.Joystick_VM = new JoystickViewModel(new JoystickModel(fgModel));
+            this.TableListener = fgModel;
+            this.AnomalySelect_VM = new AnomalySelectViewModel(anomalyGraphModel);
+            
             InitializeComponent();
             DataContext = this;
+
+            /*
+             to add 3  IOxyViewModel and to subscribe to each PropertyChanged
+             */
+
+            FeaturesListBox.ItemsSource = AnomalySelect_VM.VM_AllFeaturesList;
+            CollectionView cv = CollectionViewSource.GetDefaultView(FeaturesListBox.ItemsSource) as CollectionView;
+            cv.Filter = new Predicate<object>(delegate (object o)
+            {
+                string s = o as string;
+                return s?.ToUpper()?.Contains(FilterFeatures_TextBox.Text?.ToUpper()?.Trim(' ', '\t') ?? "") ?? false;
+            });
+            FeaturesListBox.Items.IsLiveFiltering = true;
+            FilterFeatures_TextBox.TextChanged += delegate (object t, TextChangedEventArgs e) {
+                cv.Refresh();
+            };
+
+
             this.Closed += delegate (object sender, EventArgs e) { fgModel.CloseFG(); };
             
         }
@@ -102,7 +126,7 @@ namespace ex1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            bool isYoni = true;
+            bool isYoni = false;
             if (isYoni)
             {
                 this.FG_Path_TextBox.Text = @"C:\Program Files\FlightGear 2020.3.6\bin\fgfs.exe";
@@ -123,6 +147,22 @@ namespace ex1
             //var x = this.Joystick_SmallCircle.Margin;
             //this.Joystick_SmallCircle.Margin = new Thickness(x.Left-15,x.Top, 0, 0);
             // this.Joystick_SmallCircle.TransformToAncestor(this).Transform(new Point(9,-9));
+        }
+
+        private void AddDetector_Click(object sender, RoutedEventArgs e)
+        {
+            var path = Utils.GetFilePathFromUserGUI("Anomaly Detecion algorithim", "*.dll");
+
+            if (String.IsNullOrWhiteSpace(path) || !System.IO.File.Exists(path)) { 
+                MessageBox.Show("No dll was choosen.");
+                return;
+            }
+
+            if (!this.AnomalySelect_VM.LoadDetectorFromDll(path))
+            {
+                MessageBox.Show("Unable to load the dll, or read the csv files.");
+            }
+            Detectors_ComboBox.Items.Add(new FileDetails(path).NameWithoutExtension);
         }
     }
 }

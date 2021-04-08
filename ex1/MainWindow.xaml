@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:ex1"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="window" x:Class="ex1.MainWindow"
         mc:Ignorable="d" Height="610" Width="867" Title="something">
+    <Window.Resources>
+        <local:ConvertorNiceString x:Key="Precision8"/>
+    </Window.Resources>
     <Grid x:Name="grid" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Height="561" Width="857">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="340*"/>
@@ -37,10 +40,10 @@
             <Button x:Name="Plus10SecButton" Content="&gt;&gt;" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Click="Plus10SecButton_Click" Grid.Column="4" Grid.RowSpan="2" Width="100" IsEnabled="{Binding FG_Player_VM.VM_IsRunning, Mode=OneWay}"/>
             <Button x:Name="StopButton" Content="Stop" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="102" Click="StopButton_Click" Grid.Column="3" Grid.RowSpan="2" IsEnabled="{Binding FG_Player_VM.VM_IsRunning, Mode=OneWay}"/>
             <Button x:Name="PauseButton" Content="Pause" HorizontalAlignment="Left" Width="102" Click="PauseButton_Click" Grid.Column="2" Height="47" VerticalAlignment="Top" Grid.RowSpan="2" IsEnabled="{Binding FG_Player_VM.VM_IsRunning, Mode=OneWay}"/>
-            <Slider HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="8" Height="45" Width="794" Margin="0,20.333,0,0" Grid.RowSpan="2" SmallChange="1" Value="{Binding FG_Player_VM.VM_CurrentTimeStep, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="{Binding FG_Player_VM.VM_MaxTimeStep}"/>
+            <Slider HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="5" Height="45" Width="536" Margin="0,20.333,0,0" Grid.RowSpan="2" SmallChange="1" Value="{Binding FG_Player_VM.VM_CurrentTimeStep, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="{Binding FG_Player_VM.VM_MaxTimeStep}"/>
             <Label x:Name="Speed" Content="Speed:" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Top" Height="45" Width="101" FontSize="20"/>
-            <TextBox x:Name="TimeTextBox" Grid.Column="6" HorizontalAlignment="Center" Height="25" TextWrapping="Wrap" Text="{Binding FG_Player_VM.VM_CurrentTimeInStr, Mode=OneWay}" VerticalAlignment="Center" Width="82" Margin="59.333,9,73.333,31.333" IsEnabled="False" Grid.RowSpan="2" Grid.ColumnSpan="2" FontSize="15"/>
-            <ComboBox x:Name="SpeedComboBox" Grid.ColumnSpan="2" Grid.Column="5" HorizontalAlignment="Left" Margin="80.333,11,0,0" VerticalAlignment="Top" Width="52" SelectedItem="{Binding FG_Player_VM.VM_SpeedTimes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="2" Grid.RowSpan="2">
+            <TextBox x:Name="TimeTextBox" Grid.Column="6" HorizontalAlignment="Center" Height="25" TextWrapping="Wrap" Text="{Binding FG_Player_VM.VM_CurrentTimeInStr, Mode=OneWay}" VerticalAlignment="Center" Width="82" Margin="107,10,25.083,30.333" IsEnabled="False" Grid.RowSpan="2" Grid.ColumnSpan="2" FontSize="15"/>
+            <ComboBox x:Name="SpeedComboBox" Grid.Column="6" HorizontalAlignment="Left" Margin="0,11,0,0" VerticalAlignment="Top" Width="52" SelectedItem="{Binding FG_Player_VM.VM_SpeedTimes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="2" Grid.RowSpan="2">
                 <System:String>0.25</System:String>
                 <System:String>0.5</System:String>
                 <System:String>1</System:String>
@@ -49,7 +52,18 @@
                 <System:String>4</System:String>
                 <System:String>5</System:String>
             </ComboBox>
-            <Button Grid.ColumnSpan="2" Content="Debug" Grid.Column="3" HorizontalAlignment="Left" Height="32" Margin="102,22.667,0,0" Grid.Row="2" Grid.RowSpan="2" VerticalAlignment="Top" Width="102" Click="Button_Click"/>
+            <Label Content="Heading :" Grid.Column="3" HorizontalAlignment="Left" Margin="107,0,0,-1" Grid.Row="3" VerticalAlignment="Top" Height="33" Width="60" Grid.ColumnSpan="2"/>
+            <Label Content="Pitch :" Grid.Column="3" HorizontalAlignment="Left" Margin="107,32.333,0,0" VerticalAlignment="Top" Height="33" Grid.RowSpan="2" Width="60" Grid.Row="1" Grid.ColumnSpan="2"/>
+            <Label Content="Air-Speed :" Grid.Column="2" HorizontalAlignment="Left" Margin="0.333,0,0,-1" Grid.Row="3" VerticalAlignment="Top" Height="33" Width="71"/>
+            <Label Content="Height :" Grid.Column="2" HorizontalAlignment="Left" Margin="0.333,32.333,0,0" Grid.Row="1" VerticalAlignment="Top" Height="33" Grid.RowSpan="2" Width="60"/>
+            <Label Content="Roll :" Grid.Column="6" HorizontalAlignment="Left" Margin="0,32.333,0,0" Grid.Row="1" VerticalAlignment="Top" Height="33" Grid.RowSpan="2" Width="60"/>
+            <Label Content="Yaw :" Grid.Column="6" HorizontalAlignment="Left" Margin="0,29.667,0,0" Grid.Row="2" VerticalAlignment="Top" Height="33" Grid.RowSpan="2" Width="60"/>
+            <TextBox x:Name="HeightTextBox" Grid.Column="2" HorizontalAlignment="Center" Height="25" TextWrapping="Wrap" Text="{Binding TableListener.FeaturesValue[altimeter_indicated-altitude-ft], Converter={StaticResource Precision8}, Mode=OneWay}" VerticalAlignment="Center" Width="82" Margin="65.333,2.667,67.333,5" IsEnabled="False" Grid.ColumnSpan="2" FontSize="15" Grid.Row="2"/>
+            <TextBox x:Name="AirSpeedTextBox" Grid.Column="2" HorizontalAlignment="Center" Height="25" TextWrapping="Wrap" Text="{Binding TableListener.FeaturesValue[airspeed-kt], Converter={StaticResource Precision8}, Mode=OneWay}" VerticalAlignment="Center" Width="82" Margin="65.333,5,67.333,2" IsEnabled="False" Grid.ColumnSpan="2" FontSize="15" Grid.Row="3"/>
+            <TextBox x:Name="PitchTextBox" Grid.Column="4" HorizontalAlignment="Center" Height="25" TextWrapping="Wrap" Text="{Binding TableListener.FeaturesValue[pitch-deg], Converter={StaticResource Precision8}, Mode=OneWay}" VerticalAlignment="Center" Width="82" Margin="49.667,2.667,83,5" IsEnabled="False" Grid.ColumnSpan="2" FontSize="15" Grid.Row="2"/>
+            <TextBox x:Name="HeadingTextBox" Grid.Column="4" HorizontalAlignment="Center" Height="25" TextWrapping="Wrap" Text="{Binding TableListener.FeaturesValue[heading-deg], Converter={StaticResource Precision8}, Mode=OneWay}" VerticalAlignment="Center" Width="82" Margin="64.667,5,68,2" IsEnabled="False" Grid.ColumnSpan="2" FontSize="15" Grid.Row="3"/>
+            <TextBox x:Name="RollTextBox" Grid.Column="6" HorizontalAlignment="Center" Height="25" TextWrapping="Wrap" Text="{Binding TableListener.FeaturesValue[roll-deg], Converter={StaticResource Precision8}, Mode=OneWay}" VerticalAlignment="Center" Width="82" Margin="45,2.667,86.833,5" IsEnabled="False" Grid.ColumnSpan="2" FontSize="15" Grid.Row="2"/>
+            <TextBox x:Name="YawTextBox" Grid.Column="6" HorizontalAlignment="Center" Height="25" TextWrapping="Wrap" Text="{Binding TableListener.FeaturesValue[side-slip-deg], Converter={StaticResource Precision8}, Mode=OneWay}" VerticalAlignment="Center" Width="82" Margin="45,5,87.083,2" IsEnabled="False" Grid.ColumnSpan="2" FontSize="15" Grid.Row="3"/>
         </Grid>
         <Grid HorizontalAlignment="Left" Height="271" Margin="10,10,0,0" VerticalAlignment="Top" Width="847" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
@@ -88,12 +102,16 @@
                     </LinearGradientBrush>
                 </Ellipse.Fill>
             </Ellipse>
+            <ListBox x:Name="FeaturesListBox" HorizontalAlignment="Left" Height="147" Margin="0,49,0,0" VerticalAlignment="Top" Width="111" SelectedValue="{Binding  AnomalySelect_VM.VM_Feature1, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"/>
+            <TextBox x:Name="FilterFeatures_TextBox" HorizontalAlignment="Left" Height="26" Margin="0,12,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="111"/>
+            <ComboBox x:Name="Detectors_ComboBox" HorizontalAlignment="Left" Height="22" Margin="0,201,0,0" VerticalAlignment="Top" Width="111" SelectedIndex="{Binding AnomalySelect_VM.VM_SelectedDetectorIdx, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button x:Name="AddDetector" Content="Add New Detector" HorizontalAlignment="Left" Height="19" Margin="0,231,0,0" VerticalAlignment="Top" Width="111" Click="AddDetector_Click"/>
         </Grid>
         <TextBox x:Name="FG_Path_TextBox" HorizontalAlignment="Left" Height="22" Margin="177,9.667,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="589" IsReadOnly="True" IsUndoEnabled="False" Text="{Binding FG_Player_VM.VM_FG_Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Label Content="Flight Gear path :" HorizontalAlignment="Left" Margin="10,5.667,0,0" Grid.Row="2" VerticalAlignment="Top" Width="146"/>
         <Button x:Name="FG_Path_Button" Content="..." HorizontalAlignment="Left" Margin="782,9.667,0,0" Grid.Row="2" VerticalAlignment="Top" Width="42" Click="FG_Path_Button_Click"/>
         <TextBox x:Name="XML_Path_TextBox" HorizontalAlignment="Left" Height="22" Margin="177,39.667,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="589" IsReadOnly="True" IsUndoEnabled="False" Text="{Binding FG_Player_VM.VM_XML_Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Label Content="Flight Recoerd Protocol :" HorizontalAlignment="Left" Margin="10,35.667,0,0" Grid.Row="2" VerticalAlignment="Top" Width="146"/>
+        <Label Content="Flight Record Protocol :" HorizontalAlignment="Left" Margin="10,35.667,0,0" Grid.Row="2" VerticalAlignment="Top" Width="146"/>
         <Button x:Name="XML_Path_Button" Content="..." HorizontalAlignment="Left" Margin="782,39.667,0,0" Grid.Row="2" VerticalAlignment="Top" Width="42" Click="XML_Path_Button_Click"/>
         <TextBox x:Name="LearnCsv_Path_TextBox" HorizontalAlignment="Left" Height="22" Margin="177,70.667,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="589" IsReadOnly="True" IsUndoEnabled="False" Text="{Binding FG_Player_VM.VM_LearnCsv_Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Label Content="Normal Flight path :" HorizontalAlignment="Left" Margin="10,66.667,0,0" Grid.Row="2" VerticalAlignment="Top" Width="146"/>
@@ -101,5 +119,6 @@
         <TextBox x:Name="TestCsv_Path_TextBox" HorizontalAlignment="Left" Height="22" Margin="177,99.667,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="589" IsReadOnly="True" IsUndoEnabled="False" Text="{Binding FG_Player_VM.VM_TestCsv_Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Label Content="Test \ Current Flight path :" HorizontalAlignment="Left" Margin="10,95.667,0,0" Grid.Row="2" VerticalAlignment="Top" Width="146"/>
         <Button x:Name="TestCsv_Path_Button" Content="..." HorizontalAlignment="Left" Margin="782,99.667,0,0" Grid.Row="2" VerticalAlignment="Top" Width="42" Click="TestCsv_Path_Button_Click"/>
+        <Button Content="Debug" HorizontalAlignment="Left" Height="32" Margin="70,107.667,0,0" VerticalAlignment="Top" Width="102" Click="Button_Click" Grid.Row="2"/>
     </Grid>
 </Window>

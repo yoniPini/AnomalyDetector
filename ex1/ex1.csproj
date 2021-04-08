@@ -88,9 +88,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AnomalyGraphModel.cs" />
+    <Compile Include="AnomalySelectViewModel.cs" />
+    <Compile Include="ConvertorNiceString.cs" />
     <Compile Include="FlightGearPlayerModel.cs" />
     <Compile Include="FlightGearPlayerViewModel.cs" />
     <Compile Include="IAnomalyGraphModel.cs" />
+    <Compile Include="IAnomalySelectViewModel.cs" />
     <Compile Include="IFlightGearPlayerModel.cs" />
     <Compile Include="IFlightGearPlayerViewModel.cs" />
     <Compile Include="IJoystickModel.cs" />

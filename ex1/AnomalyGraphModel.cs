@@ -51,6 +51,7 @@ namespace ex1
         public bool LoadDetectorFromDll(string fromDllPath) { 
             var d = this.detectorsManager.AddAnomalyDetector(fromDllPath);
             if (d == null) return false;
+            d.DefaultFeatures = Utils.ParseFeaturesLine(this.fgModel.XML_Path);
             return d.Learn(this.fgModel.LearnCsv_Path) && d.Detect(this.fgModel.TestCsv_Path);
         }
         private string feature1 = "";

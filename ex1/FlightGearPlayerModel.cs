@@ -19,7 +19,7 @@ namespace ex1
             } }
         
         public List<string> AllFeaturesList { get {
-                return Table.featuresStrAsList;
+                return Table?.featuresStrAsList ?? new List<string>();
             } }
 
 
