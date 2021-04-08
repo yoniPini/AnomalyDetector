@@ -32,7 +32,7 @@ namespace ex1
         {
             get { return detectorsManager.CurrentDetectorIdx; }
             set {
-                if (detectorsManager.CurrentDetectorIdx == value || value < 0 && value >= detectorsManager.Detectors.Count)
+                if (detectorsManager.CurrentDetectorIdx == value || value < 0 || value >= detectorsManager.Detectors.Count)
                     return;
                 detectorsManager.CurrentDetectorIdx = value;
 
