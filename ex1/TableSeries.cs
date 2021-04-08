@@ -11,7 +11,8 @@ namespace ex1
     public class TableSeries
     {
         private float[][] tableValues;
-        private string[] featuresStr;
+        public readonly string[] featuresStr;
+        public readonly List<string> featuresStrAsList;
         private Dictionary<string, int> featuresToInt;
         private string[] timeStepsStr;
 
@@ -82,6 +83,7 @@ namespace ex1
                         this.tableValues[i][j] = float.Parse(valuesBeforeParse[j]);
                 }
             }
+            featuresStrAsList = featuresStr.ToList();
         }
 
         public float getCell(int i, int j)

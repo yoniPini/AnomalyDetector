@@ -79,6 +79,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AnomalyGraphModel.cs" />
     <Compile Include="FlightGearPlayerModel.cs" />
     <Compile Include="FlightGearPlayerViewModel.cs" />
     <Compile Include="IAnomalyGraphModel.cs" />

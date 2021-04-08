@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace ex1
 {
-    public interface IFlightGearPlayerModel : INotifyPropertyChanged
+    public interface IFlightGearPlayerModel : ITableSeriesListener
     {
         double Const_OriginalHz { get; }
         string FG_Path { get; set; }

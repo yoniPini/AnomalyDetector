@@ -10,6 +10,19 @@ namespace ex1
 {
     public class FlightGearPlayerModel : IFlightGearPlayerModel
     {
+        public Dictionary<string, float> FeaturesValue { get {
+                var d = new Dictionary<string, float>();
+                foreach (string s in AllFeaturesList)
+                    if (!d.ContainsKey(s))
+                        d.Add(s, Table.getCell(CurrentTimeStep, s));
+                return d;
+            } }
+        
+        public List<string> AllFeaturesList { get {
+                return Table.featuresStrAsList;
+            } }
+
+
         public double Const_OriginalHz { get { return 10.00; } }
         // only binding from model view -> model :
         public string FG_Path { get; set; }
@@ -35,7 +48,7 @@ namespace ex1
         public int CurrentTimeStep { get { return currTimeStep; } 
             set { 
                 currTimeStep = Math.Min(MaxTimeStep, Math.Max(0, value)); 
-                NotifyPropertyChanged("CurrentTimeStep", "CurrentTimeInStr"); } } // 95 for example
+                NotifyPropertyChanged("CurrentTimeStep", "CurrentTimeInStr", "FeaturesValue"); } } // 95 for example
         public int MaxTimeStep { get { 
                 if(ts != null)
                     return ts.RowsLength - 1;
@@ -105,7 +118,7 @@ namespace ex1
                                                        this.fgAdapter = null;
                                                     };
                 ts = new TableSeries(this.TestCsv_Path, Utils.ParseFeaturesLine(this.XML_Path));
-                NotifyPropertyChanged("MaxTimeStep");
+                NotifyPropertyChanged("MaxTimeStep", "AllFeaturesList");
             }
             UpdateSpeed();
             timer.Start();
