@@ -143,7 +143,7 @@ namespace ex1
         private IAnomalyDetector CurrDetector
         {
             get {
-                if (SelectedDetectorIdx < 0 || SelectedDetectorIdx > detectorsManager.Detectors.Count) return null;
+                if (SelectedDetectorIdx < 0 || SelectedDetectorIdx >= detectorsManager.Detectors.Count) return null;
                 return this.detectorsManager.Detectors[this.detectorsManager.CurrentDetectorIdx];
             }
             

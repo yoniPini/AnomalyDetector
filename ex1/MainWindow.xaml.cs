@@ -40,25 +40,29 @@ namespace ex1
             this.Joystick_VM = new JoystickViewModel(new JoystickModel(fgModel));
             this.TableListener = fgModel;
             this.AnomalySelect_VM = new AnomalySelectViewModel(anomalyGraphModel);
-            
+
             InitializeComponent();
             DataContext = this;
 
             /*
              to add 3  IOxyViewModel and to subscribe to each PropertyChanged
              */
-
-            FeaturesListBox.ItemsSource = AnomalySelect_VM.VM_AllFeaturesList;
-            CollectionView cv = CollectionViewSource.GetDefaultView(FeaturesListBox.ItemsSource) as CollectionView;
-            cv.Filter = new Predicate<object>(delegate (object o)
-            {
-                string s = o as string;
-                return s?.ToUpper()?.Contains(FilterFeatures_TextBox.Text?.ToUpper()?.Trim(' ', '\t') ?? "") ?? false;
-            });
-            FeaturesListBox.Items.IsLiveFiltering = true;
-            FilterFeatures_TextBox.TextChanged += delegate (object t, TextChangedEventArgs e) {
-                cv.Refresh();
+            AnomalySelect_VM.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e) {
+                if (e.PropertyName != "VM_AllFeaturesList") return;
+                List<string> list = AnomalySelect_VM.VM_AllFeaturesList;
+                list.Sort();
+                FeaturesListBox.ItemsSource = list;
+                CollectionView cv = CollectionViewSource.GetDefaultView(FeaturesListBox.ItemsSource) as CollectionView;
+                cv.Filter = new Predicate<object>(  delegate (object o) {
+                    string s = o as string;
+                    return s?.ToUpper()?.Contains(FilterFeatures_TextBox.Text?.ToUpper()?.Trim(' ', '\t') ?? "") ?? false;
+                    }   );
+                FeaturesListBox.Items.IsLiveFiltering = true;
+                FilterFeatures_TextBox.TextChanged += delegate (object t, TextChangedEventArgs e2) {
+                    cv.Refresh();
+                    };
             };
+
 
 
             this.Closed += delegate (object sender, EventArgs e) { fgModel.CloseFG(); };
