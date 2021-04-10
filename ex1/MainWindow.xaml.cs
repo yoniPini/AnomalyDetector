@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using Microsoft.Win32;
-
+using OxyPlot.Annotations;
 using System.ComponentModel;
 
 namespace ex1
@@ -130,7 +130,7 @@ namespace ex1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            bool isYoni = false;
+            bool isYoni = true;
             if (isYoni)
             {
                 this.FG_Path_TextBox.Text = @"C:\Program Files\FlightGear 2020.3.6\bin\fgfs.exe";

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:oxy="http://oxyplot.org/wpf"
         xmlns:local="clr-namespace:ex1"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="window" x:Class="ex1.MainWindow"
         mc:Ignorable="d" Height="610" Width="867" Title="something">
@@ -106,6 +107,7 @@
             <TextBox x:Name="FilterFeatures_TextBox" HorizontalAlignment="Left" Height="26" Margin="0,12,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="111"/>
             <ComboBox x:Name="Detectors_ComboBox" HorizontalAlignment="Left" Height="22" Margin="0,201,0,0" VerticalAlignment="Top" Width="111" SelectedIndex="{Binding AnomalySelect_VM.VM_SelectedDetectorIdx, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <Button x:Name="AddDetector" Content="Add New Detector" HorizontalAlignment="Left" Height="19" Margin="0,231,0,0" VerticalAlignment="Top" Width="111" Click="AddDetector_Click"/>
+            <oxy:PlotView x:Name="Feature1Graph"  Model="{Binding PlotModel}" Margin="0,0,0,10" />
         </Grid>
         <TextBox x:Name="FG_Path_TextBox" HorizontalAlignment="Left" Height="22" Margin="177,9.667,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="589" IsReadOnly="True" IsUndoEnabled="False" Text="{Binding FG_Player_VM.VM_FG_Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Label Content="Flight Gear path :" HorizontalAlignment="Left" Margin="10,5.667,0,0" Grid.Row="2" VerticalAlignment="Top" Width="146"/>
