@@ -13,6 +13,7 @@ namespace ex1
         string VM_XML_Path { get; set; }
         string VM_LearnCsv_Path { get; set; }
         string VM_TestCsv_Path { get; set; }
+        bool VM_IsPowerOn { get; }
         bool VM_IsRunning { get; set; }
         bool VM_IsPaused { get; set; } // opposite of the above
         int VM_CurrentTimeStep { get; set; } // 950 for example

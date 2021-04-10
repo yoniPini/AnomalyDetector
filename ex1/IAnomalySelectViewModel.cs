@@ -12,7 +12,8 @@ namespace ex1
     {
         List<string> VM_AllFeaturesList { get; }
         int VM_SelectedDetectorIdx { get; set; }        //x.DefaultFeatures; x.Detect; x.Learn;
-        bool LoadDetectorFromDll(string fromDllPath);
+        string LoadDetectorFromDll(string fromDllPath);
+        bool Analyze();
         string VM_Feature1 { get; set; } // i.e. SelectedFeature
         bool VM_IsFeature2Exists { get; }
         string VM_Feature2 { get; }

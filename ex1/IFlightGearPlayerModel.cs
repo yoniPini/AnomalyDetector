@@ -15,6 +15,7 @@ namespace ex1
         string XML_Path { get; set; }
         string LearnCsv_Path { get; set; }
         string TestCsv_Path { get; set; }
+        bool IsPowerOn { get; }
         bool IsRunning { get; set; }
         bool IsPaused { get; set; } // opposite of the above
         int CurrentTimeStep { get; set; } // 950 for example

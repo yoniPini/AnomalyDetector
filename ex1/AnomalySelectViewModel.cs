@@ -34,10 +34,11 @@ namespace ex1
             get { return model.SelectedDetectorIdx; }
             set { model.SelectedDetectorIdx = value; }
         }        //x.DefaultFeatures; x.Detect; x.Learn;
-        public bool LoadDetectorFromDll(string fromDllPath)
+        public string LoadDetectorFromDll(string fromDllPath)
         {
             return model.LoadDetectorFromDll(fromDllPath);
         }
+        public bool Analyze() { return model.Analyze(); }
         public string VM_Feature1
         {
             get { return model.Feature1; }
