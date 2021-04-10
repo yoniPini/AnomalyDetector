@@ -30,7 +30,7 @@ namespace ex1
         public string LearnCsv_Path { get; set; }
         public string TestCsv_Path { get; set; }
 
-
+        public bool IsPowerOn =>  this.fgAdapter != null;
 
         private bool isRunningNow;
         public bool IsRunning { get { return isRunningNow; } set {
@@ -117,7 +117,7 @@ namespace ex1
                                                        this.fgAdapter = null;
                                                     };
                 ts = new TableSeries(this.TestCsv_Path, Utils.ParseFeaturesLine(this.XML_Path));
-                NotifyPropertyChanged("MaxTimeStep", "AllFeaturesList");
+                NotifyPropertyChanged("MaxTimeStep", "AllFeaturesList", "IsPowerOn");
             }
             UpdateSpeed();
             timer.Start();
@@ -131,6 +131,9 @@ namespace ex1
         public void CloseFG()
         {
             this.fgAdapter?.Close(true);
+            this.IsPaused = true;
+            this.fgAdapter = null;
+            NotifyPropertyChanged("IsPowerOn");
         }
     }
 }

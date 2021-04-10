@@ -15,15 +15,18 @@ namespace ex1
         // con : IAnomalyDetector x;
         private IFlightGearPlayerModel fgModel;
         private IAnomalyDetectorsManager detectorsManager;
-        public AnomalyGraphModel(IFlightGearPlayerModel fgModel, IAnomalyDetectorsManager detectorsManager)
+        public AnomalyGraphModel(IFlightGearPlayerModel fgModel)
         {
             this.fgModel = fgModel;
             fgModel.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e) {
                 if (e.PropertyName == "AllFeaturesList") NotifyPropertyChanged("AllFeaturesList");
                 if (e.PropertyName == "CurrentTimeStep") 
                     NotifyPropertyChanged("Feature1Traces", "Feature2Traces", "Features1And2");
+                if (e.PropertyName == "IsPowerOn") this.updatedDetectors.Clear();
             };
-            this.detectorsManager = detectorsManager;
+            this.detectorsManager = new AnomalyDetectorsManager();
+            this.detectorsManager.AddAnomalyDetector(AnomalyDetectorsManager.EmptyAnomalyDetector);
+            this.detectorsManager.CurrentDetectorIdx = 0;
         }
         public List<string> AllFeaturesList { get { return this.fgModel.AllFeaturesList; } }
 
@@ -48,12 +51,25 @@ namespace ex1
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public bool LoadDetectorFromDll(string fromDllPath) { 
+        public string LoadDetectorFromDll(string fromDllPath) { 
             var d = this.detectorsManager.AddAnomalyDetector(fromDllPath);
-            if (d == null) return false;
-            d.DefaultFeatures = Utils.ParseFeaturesLine(this.fgModel.XML_Path);
-            return d.Learn(this.fgModel.LearnCsv_Path) && d.Detect(this.fgModel.TestCsv_Path);
+            if (d == null) return "";
+            return d.Name + " :\n" + d.Description;
         }
+        private List<int> updatedDetectors = new List<int>();
+        public bool Analyze()
+        {
+            if (updatedDetectors.Contains(SelectedDetectorIdx)) return true;
+            var d = CurrDetector;
+            d.DefaultFeatures = Utils.ParseFeaturesLine(this.fgModel.XML_Path);
+            if ( d.Learn(this.fgModel.LearnCsv_Path) && d.Detect(this.fgModel.TestCsv_Path))
+            {
+                updatedDetectors.Add(SelectedDetectorIdx);
+                return true;
+            }
+            return false;
+        }
+
         private string feature1 = "";
         private HashSet<long> currentFeature1AnomaliesTimeStep = new HashSet<long>();
         public string Feature1 { get { return feature1; }

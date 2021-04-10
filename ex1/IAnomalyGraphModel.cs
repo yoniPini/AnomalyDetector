@@ -25,7 +25,8 @@ namespace ex1
         // con : IAnomalyDetector x;
         List<string> AllFeaturesList { get; }
         int SelectedDetectorIdx { get; set; }        //x.DefaultFeatures; x.Detect; x.Learn;
-        bool LoadDetectorFromDll(string fromDllPath);
+        string LoadDetectorFromDll(string fromDllPath);
+        bool Analyze();
         string Feature1 { get; set; } // i.e. SelectedFeature
         bool IsFeature2Exists { get; } // i.e. if the detector has found someother feature,
                                       // =feature2 that it's correlative with feature1
