@@ -89,7 +89,7 @@
     </ApplicationDefinition>
     <Compile Include="AnomalyGraphModel.cs" />
     <Compile Include="AnomalySelectViewModel.cs" />
-    <Compile Include="ConvertorNiceString.cs" />
+    <Compile Include="FloatFormat.cs" />
     <Compile Include="FlightGearPlayerModel.cs" />
     <Compile Include="FlightGearPlayerViewModel.cs" />
     <Compile Include="IAnomalyGraphModel.cs" />
@@ -104,7 +104,7 @@
     <Compile Include="JoystickViewModel.cs" />
     <Compile Include="OxyViewModel.cs" />
     <Compile Include="TableSeries.cs" />
-    <Compile Include="ITableSeriesListener.cs" />
+    <Compile Include="ITableSeriesNotify.cs" />
     <Compile Include="Utils.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

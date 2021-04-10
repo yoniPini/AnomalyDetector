@@ -32,7 +32,9 @@ namespace ex1
         public int VM_SelectedDetectorIdx
         {
             get { return model.SelectedDetectorIdx; }
-            set { model.SelectedDetectorIdx = value; }
+            set { model.SelectedDetectorIdx = value;
+                model.Analyze();
+            }
         }        //x.DefaultFeatures; x.Detect; x.Learn;
         public string LoadDetectorFromDll(string fromDllPath)
         {

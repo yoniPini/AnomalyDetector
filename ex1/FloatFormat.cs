@@ -11,7 +11,7 @@ namespace ex1
     </Window.Resources> */
 
     // Text="{Binding qf, Converter={StaticResource Precision8}, Mode=OneWay}"
-    public class ConvertorNiceString : IValueConverter
+    public class FloatFormat : IValueConverter
     {
         private string helper(double x)
         {

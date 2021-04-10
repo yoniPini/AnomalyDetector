@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace ex1
 {
-    public interface ITableSeriesListener : INotifyPropertyChanged
+    public interface ITableSeriesNotify : INotifyPropertyChanged
     {
         //public TableSeries operator[int i];
         //float this[string x] { get { return 0; } }

@@ -64,38 +64,43 @@ namespace ex1
         }
         public static string ParseFeaturesLine(string xmlFile)
         {
-            // root -> PropertyList -> generic -> input -> chunk -> name
-            var xml = new XmlDocument();
-            xml.Load(new System.IO.StreamReader(xmlFile)); // root
-            var childs = GetElementsChilds(xml.ChildNodes, "PropertyList");
-            childs = GetElementsChilds(childs, "generic");
-            childs = GetElementsChilds(childs, "input");
-            childs = GetElementsChilds(childs, "chunk");
-            childs = GetElementsChilds(childs, "name");
-
-            List<string> features = new List<string>();
-            // <feature, <x=total, y=current>>
-            Dictionary<string, Pair> amountOfFeaure = new Dictionary<string, Pair>();
-            foreach (var nameElement in childs)
+            try
             {
-                features.Add(nameElement.InnerText);
-                if (amountOfFeaure.ContainsKey(nameElement.InnerText))
+                // root -> PropertyList -> generic -> input -> chunk -> name
+                var xml = new XmlDocument();
+                xml.Load(new System.IO.StreamReader(xmlFile)); // root
+                var childs = GetElementsChilds(xml.ChildNodes, "PropertyList");
+                childs = GetElementsChilds(childs, "generic");
+                childs = GetElementsChilds(childs, "input");
+                childs = GetElementsChilds(childs, "chunk");
+                childs = GetElementsChilds(childs, "name");
+
+                List<string> features = new List<string>();
+                // <feature, <x=total, y=current>>
+                Dictionary<string, Pair> amountOfFeaure = new Dictionary<string, Pair>();
+                foreach (var nameElement in childs)
                 {
-                    amountOfFeaure[nameElement.InnerText].x++;
+                    features.Add(nameElement.InnerText);
+                    if (amountOfFeaure.ContainsKey(nameElement.InnerText))
+                    {
+                        amountOfFeaure[nameElement.InnerText].x++;
+                    }
+                    else
+                    {
+                        amountOfFeaure.Add(nameElement.InnerText, new Pair(0, 0));
+                    }
                 }
-                else
-                {
-                    amountOfFeaure.Add(nameElement.InnerText, new Pair(0, 0));
-                }
+
+
+                String[] array = features.ToArray();
+                for (int i = 0; i < array.Length; i++)
+                    if (amountOfFeaure[array[i]].x > 0)
+                        array[i] = array[i] + "[" + (amountOfFeaure[array[i]].y++) + "]";
+
+                return String.Join(",", array);
             }
-
-
-            String[] array = features.ToArray();
-            for (int i = 0; i < array.Length; i++)
-                if (amountOfFeaure[array[i]].x > 0)
-                    array[i] = array[i] + "[" + (amountOfFeaure[array[i]].y++) + "]";
-
-            return String.Join(",", array);
+            catch
+            { return ""; }
         }
 
         // example: var x = GetFileDetailsFromUserGUI("xml file", "*.xml");

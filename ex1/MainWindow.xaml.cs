@@ -29,7 +29,7 @@ namespace ex1
         public event PropertyChangedEventHandler PropertyChanged;
         public IFlightGearPlayerViewModel FG_Player_VM { get; }
         public IJoystickViewModel Joystick_VM { get; }
-        public ITableSeriesListener TableListener { get; }
+        public ITableSeriesNotify TableListener { get; }
         public IAnomalySelectViewModel AnomalySelect_VM { get; }
         public MainWindow()
         {
@@ -43,7 +43,12 @@ namespace ex1
 
             InitializeComponent();
             DataContext = this;
-
+            Detectors_ComboBox.Items.Add(new ComboBoxItem()
+            {
+                Content = "- Not Selected -",
+                ToolTip = AnomalyDetectorsManager.EmptyAnomalyDetector.Name + "\n" + AnomalyDetectorsManager.EmptyAnomalyDetector.Description}
+            );
+            Detectors_ComboBox.SelectedIndex = 0;
             /*
              to add 3  IOxyViewModel and to subscribe to each PropertyChanged
              */
@@ -65,7 +70,7 @@ namespace ex1
 
 
 
-            this.Closed += delegate (object sender, EventArgs e) { fgModel.CloseFG(); };
+            this.Closed += delegate (object sender, EventArgs e) { FG_Player_VM.CloseFG(); };
             
         }
         
@@ -91,6 +96,8 @@ namespace ex1
         {
             this.FG_Player_VM.VM_IsPaused = true;
             this.FG_Player_VM.VM_CurrentTimeStep = 0;
+            this.FG_Player_VM.CloseFG();
+            this.Detectors_ComboBox.SelectedIndex = 0;
         }
 
         private void Plus10SecButton_Click(object sender, RoutedEventArgs e)
@@ -130,7 +137,7 @@ namespace ex1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            bool isYoni = true;
+            bool isYoni = false;
             if (isYoni)
             {
                 this.FG_Path_TextBox.Text = @"C:\Program Files\FlightGear 2020.3.6\bin\fgfs.exe";
@@ -161,12 +168,19 @@ namespace ex1
                 MessageBox.Show("No dll was choosen.");
                 return;
             }
-
-            if (String.IsNullOrWhiteSpace(this.AnomalySelect_VM.LoadDetectorFromDll(path)))
+            var s = this.AnomalySelect_VM.LoadDetectorFromDll(path);
+            if (String.IsNullOrWhiteSpace(s))
             {
                 MessageBox.Show("Unable to load the dll, or read the csv files.");
             }
-            Detectors_ComboBox.Items.Add(new FileDetails(path).NameWithoutExtension);
+           // Detectors_ComboBox.Items.Add(.NameWithoutExtension);
+            Detectors_ComboBox.Items.Add(new ComboBoxItem() { 
+                Content = new FileDetails(path).OnlyFullName,
+                ToolTip = s + "\n\nLoaded from :\n" + path});
+
+            //  |w| < p(|<M, x>|)
+
+            //  (<M', x'>, 1) not in R
         }
     }
 }

@@ -15,6 +15,7 @@ namespace ex1
         public string VM_LearnCsv_Path { get { return model.LearnCsv_Path; } set { model.LearnCsv_Path = value; } }
         public string VM_TestCsv_Path { get { return model.TestCsv_Path; } set { model.TestCsv_Path = value; } }
         public bool VM_IsPowerOn => model.IsPowerOn; 
+        public bool VM_IsPowerOff => !model.IsPowerOn; 
         public bool VM_IsRunning { 
             get { return model.IsRunning; }
             set {
@@ -42,6 +43,7 @@ namespace ex1
             this.model = model;
             model.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e) {
                 NotifyPropertyChanged("VM_" + e.PropertyName);
+                if (e.PropertyName == "IsPowerOn") NotifyPropertyChanged("VM_IsPowerOff");
             };
         }
         private void NotifyPropertyChanged(params string[] propertyNames)
@@ -72,6 +74,10 @@ namespace ex1
                 return;
             }
             this.model.IsRunning = true;
+        }
+        public void CloseFG()
+        {
+            model.CloseFG();
         }
     }
 }
