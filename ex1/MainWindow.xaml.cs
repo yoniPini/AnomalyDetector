@@ -34,7 +34,7 @@ namespace ex1
         public MainWindow()
         {
             var fgModel = new FlightGearPlayerModel();
-            var anomalyGraphModel = new AnomalyGraphModel(fgModel, new AnomalyDetectorsManager());
+            var anomalyGraphModel = new AnomalyGraphModel(fgModel);
 
             this.FG_Player_VM = new FlightGearPlayerViewModel(fgModel);
             this.Joystick_VM = new JoystickViewModel(new JoystickModel(fgModel));
@@ -162,7 +162,7 @@ namespace ex1
                 return;
             }
 
-            if (!this.AnomalySelect_VM.LoadDetectorFromDll(path))
+            if (String.IsNullOrWhiteSpace(this.AnomalySelect_VM.LoadDetectorFromDll(path)))
             {
                 MessageBox.Show("Unable to load the dll, or read the csv files.");
             }
