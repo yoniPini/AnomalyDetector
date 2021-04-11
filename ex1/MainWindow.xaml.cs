@@ -80,7 +80,7 @@ namespace ex1
                 FeaturesListBox.Items.IsLiveFiltering = true;
                 FilterFeatures_TextBox.TextChanged += delegate (object t, TextChangedEventArgs e2) {
                     cv.Refresh();
-                    };
+                };
             };
 
             this.Closed += delegate (object sender, EventArgs e) { FG_Player_VM.CloseFG(); };
@@ -100,11 +100,14 @@ namespace ex1
         private void UpdateFeatures1Graph()
         {
             Series ls = OxyViewModel_VM_F1.Ls;
-            PlotModelF1.Series.Remove(ls);
             if (ls != null)
+            {
+                PlotModelF1.Series.Remove(ls);
                 PlotModelF1.Series.Add(ls);
+                Feature1Graph.InvalidatePlot(true);
+            }
         }
-        
+
         private void SetUpFeature2Graph()
         {
             OxyViewModel_VM_F2.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
@@ -194,7 +197,7 @@ namespace ex1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            bool isYoni = false;
+            bool isYoni = true;
             if (isYoni)
             {
                 this.FG_Path_TextBox.Text = @"C:\Program Files\FlightGear 2020.3.6\bin\fgfs.exe";
