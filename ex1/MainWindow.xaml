@@ -6,7 +6,7 @@
         xmlns:oxy="http://oxyplot.org/wpf"
         xmlns:local="clr-namespace:ex1"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="window" x:Class="ex1.MainWindow"
-        mc:Ignorable="d" Height="610" Width="867" Title="something">
+        mc:Ignorable="d" Height="610" Width="867" Title="Flight Inspection App" ResizeMode="CanMinimize">
     <Window.Resources>
         <local:FloatFormat x:Key="Precision8"/>
     </Window.Resources>

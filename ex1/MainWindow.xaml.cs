@@ -105,6 +105,16 @@ namespace ex1
                 FilterHintLabel.Visibility = Visibility.Hidden;
             };
             this.Closed += delegate (object sender, EventArgs e) { FG_Player_VM.CloseFG(); };
+            Feature1And2Graph.MouseLeave += delegate (object s, MouseEventArgs e)
+            {
+                PlotModelF1AndF2.ResetAllAxes();
+                Feature1And2Graph.InvalidatePlot();
+            };
+            try
+            {
+                string appPath = System.AppDomain.CurrentDomain.BaseDirectory;
+                this.Icon = new BitmapImage(new Uri(appPath + "icon.png"));
+            } catch { }
         }
         
         private void SetUpFeature1Graph()
