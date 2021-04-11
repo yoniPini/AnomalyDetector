@@ -35,6 +35,7 @@ namespace ex1
         List<SpecialPoint> Feature2Traces { get; } // <timestep[i], value[i]> for i in last 30 timesteps
         List<SpecialPoint> Features1And2 { get; } // <x[i],y[i]> for i in last 30 timesteps
         object CorrelationObject { get; }
+        
         string CorrelationObjectType { get; }
 
         // INotifyPropertyChanged:

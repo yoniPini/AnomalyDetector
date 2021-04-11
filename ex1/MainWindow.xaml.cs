@@ -32,7 +32,9 @@ namespace ex1
         private string f2 = "Feature2Traces";
         private string f1Andf2 = "Features1And2";
         public PlotModel PlotModelF1 { get; set; }
-
+        public PlotModel PlotModelF2 { get; set; }
+        public PlotModel PlotModelF1AndF2 { get; set; }
+        //axis  is zoom enabled
         public event PropertyChangedEventHandler PropertyChanged;
         public IFlightGearPlayerViewModel FG_Player_VM { get; }
         public IJoystickViewModel Joystick_VM { get; }
@@ -53,11 +55,13 @@ namespace ex1
             this.OxyViewModel_VM_F1 = new OxyViewModel(anomalyGraphModel, f1);
             this.OxyViewModel_VM_F2 = new OxyViewModel(anomalyGraphModel, f2);
             this.OxyViewModel_VM_F1AndF2 = new OxyViewModel(anomalyGraphModel, f1Andf2);
+            
+            InitializeComponent();
+            
             SetUpFeature1Graph();
             SetUpFeature2Graph();
             SetUpFeature1AndF2Graph();
 
-            InitializeComponent();
             DataContext = this;
             Detectors_ComboBox.Items.Add(new ComboBoxItem()
             {
@@ -110,6 +114,9 @@ namespace ex1
 
         private void SetUpFeature2Graph()
         {
+            PlotModelF2 = new PlotModel();
+            PlotModelF2.Axes.Add(OxyViewModel_VM_F2.LeftAxis);
+            PlotModelF2.Axes.Add(OxyViewModel_VM_F2.BottomAxis);
             OxyViewModel_VM_F2.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 if (e.PropertyName == f2)
@@ -118,11 +125,20 @@ namespace ex1
         }
         private void UpdateFeatures2Graph()
         {
-
+            Series ls = OxyViewModel_VM_F2.Ls;
+            if (ls != null)
+            {
+                PlotModelF2.Series.Remove(ls);
+                PlotModelF2.Series.Add(ls);
+                Feature2Graph.InvalidatePlot(true);
+            }
         }
         
         private void SetUpFeature1AndF2Graph()
         {
+            PlotModelF1AndF2 = new PlotModel();
+            PlotModelF1AndF2.Axes.Add(OxyViewModel_VM_F1AndF2.LeftAxis);
+            PlotModelF1AndF2.Axes.Add(OxyViewModel_VM_F1AndF2.BottomAxis);
             OxyViewModel_VM_F1AndF2.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 if (e.PropertyName == f1Andf2)
@@ -131,7 +147,16 @@ namespace ex1
         }
         private void UpdateFeatures1AndF2Graph()
         {
-
+            Series ls = OxyViewModel_VM_F1AndF2.Normal;
+            Series ls2 = OxyViewModel_VM_F1AndF2.ANormal;
+            if (ls != null && ls2 != null)
+            {
+                PlotModelF1AndF2.Series.Remove(ls);
+                PlotModelF1AndF2.Series.Remove(ls2);
+                PlotModelF1AndF2.Series.Add(ls);
+                PlotModelF1AndF2.Series.Add(ls2);
+                Feature1And2Graph.InvalidatePlot(true);
+            }
         }
 
         private void SpeedTextBox_KeyDown(object sender, KeyEventArgs e)
@@ -202,7 +227,7 @@ namespace ex1
             {
                 this.FG_Path_TextBox.Text = @"C:\Program Files\FlightGear 2020.3.6\bin\fgfs.exe";
                 this.LearnCsv_Path_TextBox.Text = @"C:\Users\WIN10\OneDrive\שולחן העבודה\מסמכים של בר אילן\שנה ב\‏‏סמסטר ב\תכנות מתקדם 2\קבצים לפרויקט-20210324\reg_flight.csv";
-                this.TestCsv_Path_TextBox.Text = @"C:\Users\WIN10\OneDrive\שולחן העבודה\מסמכים של בר אילן\שנה ב\‏‏סמסטר ב\תכנות מתקדם 2\קבצים לפרויקט-20210324\reg_flight.csv";
+                this.TestCsv_Path_TextBox.Text = @"C:\Users\WIN10\OneDrive\שולחן העבודה\מסמכים של בר אילן\שנה ב\‏‏סמסטר ב\תכנות מתקדם 2\קבצים לפרויקט-20210324\anomaly_flight.csv";
                 this.XML_Path_TextBox.Text = @"C:\Program Files\FlightGear 2020.3.6\data\Protocol\playback_small.xml";
             }
             else

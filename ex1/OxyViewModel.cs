@@ -14,9 +14,9 @@ namespace ex1
     {
         private IAnomalyGraphModel anomalyGraphModel;
         string property;
-        private LineSeries ls = new LineSeries();
-        private ScatterSeries normal = new ScatterSeries();
-        private ScatterSeries aNormal = new ScatterSeries();
+        private LineSeries ls;
+        private ScatterSeries normal;
+        private ScatterSeries aNormal;
         private LinearAxis leftAxis = new LinearAxis()
         {
             Position = AxisPosition.Left,
@@ -85,21 +85,18 @@ namespace ex1
 
         private void feature1Update()
         {
-            ls.Points.Add(new DataPoint(5, 6)); // debug
+            //ls.Points.Add(new DataPoint(5, 6)); // debug
             
             var list = anomalyGraphModel.Feature1Traces;
-            /*
             ls.Points.Clear();
             foreach (var item in list)
                 ls.Points.Add(new DataPoint(item.x, item.y));
-            */
         }
 
         private void feature2Update()
         {
             var list = anomalyGraphModel.Feature2Traces;
             ls.Points.Clear();
-
             foreach (var item in list)
                 ls.Points.Add(new DataPoint(item.x, item.y));
         }
@@ -120,16 +117,20 @@ namespace ex1
 
         public OxyViewModel(IAnomalyGraphModel a, string p)
         {
-
+            
             ls = new LineSeries();
             ls.Color = OxyColors.Blue;
             //thickness
             normal = new ScatterSeries();
-            normal.MarkerFill = OxyColors.White;
+            normal.MarkerFill = OxyColors.Blue;
+            normal.MarkerStrokeThickness = 0.05;
+            normal.MarkerType = MarkerType.Circle;
 
             aNormal = new ScatterSeries();
             aNormal.MarkerFill = OxyColors.Red;
-            
+            aNormal.MarkerStrokeThickness = 0.05;
+            aNormal.MarkerType = MarkerType.Circle;
+
             anomalyGraphModel = a;
             property = p;
             anomalyGraphModel.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
