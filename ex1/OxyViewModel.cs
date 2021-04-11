@@ -14,9 +14,26 @@ namespace ex1
     {
         private IAnomalyGraphModel anomalyGraphModel;
         string property;
-        private LineSeries ls = null;
-        private ScatterSeries normal = null;
-        private ScatterSeries aNormal = null;
+        private LineSeries ls = new LineSeries();
+        private ScatterSeries normal = new ScatterSeries();
+        private ScatterSeries aNormal = new ScatterSeries();
+        private LinearAxis leftAxis = new LinearAxis()
+        {
+            Position = AxisPosition.Left,
+            MajorGridlineStyle = LineStyle.Solid,
+            MinorGridlineStyle = LineStyle.Dot,
+            Title = "",
+            StartPosition = 0,
+        };
+
+        private LinearAxis bottomAxis = new LinearAxis()
+        {
+            Position = AxisPosition.Bottom,
+            MajorGridlineStyle = LineStyle.Solid,
+            MinorGridlineStyle = LineStyle.Dot,
+            Title = "",
+            StartPosition = 0,
+        };
 
         public LineSeries Ls
         {
@@ -33,12 +50,12 @@ namespace ex1
         }
         public LinearAxis BottomAxis
         {
-            get { return null; }
+            get { return bottomAxis; }
         }
 
         public LinearAxis LeftAxis
         {
-            get { return null; }
+            get { return leftAxis; }
         }
 
         public string LegendTitle
@@ -68,14 +85,21 @@ namespace ex1
 
         private void feature1Update()
         {
+            ls.Points.Add(new DataPoint(5, 6)); // debug
+            
             var list = anomalyGraphModel.Feature1Traces;
+            /*
+            ls.Points.Clear();
             foreach (var item in list)
                 ls.Points.Add(new DataPoint(item.x, item.y));
+            */
         }
 
         private void feature2Update()
         {
             var list = anomalyGraphModel.Feature2Traces;
+            ls.Points.Clear();
+
             foreach (var item in list)
                 ls.Points.Add(new DataPoint(item.x, item.y));
         }
@@ -83,6 +107,8 @@ namespace ex1
         private void bothFeatures1Update()
         {
             var list = anomalyGraphModel.Features1And2;
+            normal.Points.Clear();
+            aNormal.Points.Clear();
             foreach (var item in list) {
                 if (!item.isAnomaly)
                     normal.Points.Add(new ScatterPoint(item.x, item.y));
@@ -92,15 +118,27 @@ namespace ex1
         }
 
 
-        OxyViewModel(IAnomalyGraphModel a, string p)
+        public OxyViewModel(IAnomalyGraphModel a, string p)
         {
+
+            ls = new LineSeries();
+            ls.Color = OxyColors.Blue;
+            //thickness
+            normal = new ScatterSeries();
+            normal.MarkerFill = OxyColors.White;
+
+            aNormal = new ScatterSeries();
+            aNormal.MarkerFill = OxyColors.Red;
+            
             anomalyGraphModel = a;
             property = p;
             anomalyGraphModel.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
-                setCorrectOption();
                 if (property == e.PropertyName)
+                {
+                    setCorrectOption();
                     this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+                }
             };
         }
 

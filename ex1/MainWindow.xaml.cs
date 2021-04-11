@@ -14,7 +14,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using Microsoft.Win32;
-using OxyPlot.Annotations;
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
 using System.ComponentModel;
 
 namespace ex1
@@ -26,11 +28,19 @@ namespace ex1
     {
         // assuming throttleSlider value is [0,1]
         // assuming rudderSlider value is [-1, 1]
+        private string f1 = "Feature1Traces";
+        private string f2 = "Feature2Traces";
+        private string f1Andf2 = "Features1And2";
+        public PlotModel PlotModelF1 { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public IFlightGearPlayerViewModel FG_Player_VM { get; }
         public IJoystickViewModel Joystick_VM { get; }
         public ITableSeriesNotify TableListener { get; }
         public IAnomalySelectViewModel AnomalySelect_VM { get; }
+        public IOxyViewModel OxyViewModel_VM_F1 { get; }
+        public IOxyViewModel OxyViewModel_VM_F2 { get; }
+        public IOxyViewModel OxyViewModel_VM_F1AndF2 { get; }
         public MainWindow()
         {
             var fgModel = new FlightGearPlayerModel();
@@ -40,14 +50,19 @@ namespace ex1
             this.Joystick_VM = new JoystickViewModel(new JoystickModel(fgModel));
             this.TableListener = fgModel;
             this.AnomalySelect_VM = new AnomalySelectViewModel(anomalyGraphModel);
+            this.OxyViewModel_VM_F1 = new OxyViewModel(anomalyGraphModel, f1);
+            this.OxyViewModel_VM_F2 = new OxyViewModel(anomalyGraphModel, f2);
+            this.OxyViewModel_VM_F1AndF2 = new OxyViewModel(anomalyGraphModel, f1Andf2);
+            SetUpFeature1Graph();
+            SetUpFeature2Graph();
+            SetUpFeature1AndF2Graph();
 
             InitializeComponent();
             DataContext = this;
             Detectors_ComboBox.Items.Add(new ComboBoxItem()
             {
                 Content = "- Not Selected -",
-                ToolTip = AnomalyDetectorsManager.EmptyAnomalyDetector.Name + "\n" + AnomalyDetectorsManager.EmptyAnomalyDetector.Description}
-            );
+                ToolTip = AnomalyDetectorsManager.EmptyAnomalyDetector.Name + "\n" + AnomalyDetectorsManager.EmptyAnomalyDetector.Description});
             Detectors_ComboBox.SelectedIndex = 0;
             /*
              to add 3  IOxyViewModel and to subscribe to each PropertyChanged
@@ -68,12 +83,54 @@ namespace ex1
                     };
             };
 
-
-
             this.Closed += delegate (object sender, EventArgs e) { FG_Player_VM.CloseFG(); };
-            
         }
         
+        private void SetUpFeature1Graph()
+        {
+            PlotModelF1 = new PlotModel();
+            PlotModelF1.Axes.Add(OxyViewModel_VM_F1.LeftAxis);
+            PlotModelF1.Axes.Add(OxyViewModel_VM_F1.BottomAxis);
+            OxyViewModel_VM_F1.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == f1)
+                    UpdateFeatures1Graph();
+            };
+        }
+        private void UpdateFeatures1Graph()
+        {
+            Series ls = OxyViewModel_VM_F1.Ls;
+            PlotModelF1.Series.Remove(ls);
+            if (ls != null)
+                PlotModelF1.Series.Add(ls);
+        }
+        
+        private void SetUpFeature2Graph()
+        {
+            OxyViewModel_VM_F2.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == f2)
+                    UpdateFeatures2Graph();
+            };
+        }
+        private void UpdateFeatures2Graph()
+        {
+
+        }
+        
+        private void SetUpFeature1AndF2Graph()
+        {
+            OxyViewModel_VM_F1AndF2.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == f1Andf2)
+                    UpdateFeatures1AndF2Graph();
+            };
+        }
+        private void UpdateFeatures1AndF2Graph()
+        {
+
+        }
+
         private void SpeedTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             KeyConverter kc = new KeyConverter();
@@ -137,7 +194,7 @@ namespace ex1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            bool isYoni = false;
+            bool isYoni = true;
             if (isYoni)
             {
                 this.FG_Path_TextBox.Text = @"C:\Program Files\FlightGear 2020.3.6\bin\fgfs.exe";
