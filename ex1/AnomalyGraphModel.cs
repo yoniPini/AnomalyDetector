@@ -61,6 +61,7 @@ namespace ex1
         {
             if (updatedDetectors.Contains(SelectedDetectorIdx)) return true;
             var d = CurrDetector;
+            d.Dispose();
             d.DefaultFeatures = Utils.ParseFeaturesLine(this.fgModel.XML_Path);
             if ( d.Learn(this.fgModel.LearnCsv_Path) && d.Detect(this.fgModel.TestCsv_Path))
             {

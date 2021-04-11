@@ -15,9 +15,9 @@ namespace ex1
 
         private bool IsFGReady()
         {
-            telnet.Send(ASCIIEncoding.ASCII.GetBytes("get /sim/fdm-initialized\r\n"));
+            telnet?.Send(ASCIIEncoding.ASCII.GetBytes("get /sim/fdm-initialized\r\n"));
             byte[] buffer = new byte[100];
-            telnet.Receive(buffer);
+            telnet?.Receive(buffer);
             string answer = new String(ASCIIEncoding.ASCII.GetChars(buffer));
             return answer.Split(' ')[2] == "'true'";
         }
@@ -32,10 +32,10 @@ namespace ex1
                 try
                 {
                     this.telnet = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
-                    this.telnet.Connect("localhost", telnetPort);
+                    this.telnet?.Connect("localhost", telnetPort);
 
                     this.playback = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
-                    this.playback.Connect("localhost", playbackPort);
+                    this.playback?.Connect("localhost", playbackPort);
                     tries = 0;
                     error = false;
                 }
@@ -55,12 +55,12 @@ namespace ex1
 
                 Thread.Sleep(1000);
 
-                telnet.Send(ASCIIEncoding.ASCII.GetBytes("set /sim/view[1]/enabled true\r\n"));
-                telnet.Send(ASCIIEncoding.ASCII.GetBytes("set /sim/current-view/view-number 1\r\n"));
-                telnet.Send(ASCIIEncoding.ASCII.GetBytes("set /sim/current-view/z-offset-m -14\r\n"));
-                telnet.Send(ASCIIEncoding.ASCII.GetBytes("set /sim/current-view/pitch-offset-deg 3\r\n"));
-                telnet.Close();
-                telnet.Dispose();
+                telnet?.Send(ASCIIEncoding.ASCII.GetBytes("set /sim/view[1]/enabled true\r\n"));
+                telnet?.Send(ASCIIEncoding.ASCII.GetBytes("set /sim/current-view/view-number 1\r\n"));
+                telnet?.Send(ASCIIEncoding.ASCII.GetBytes("set /sim/current-view/z-offset-m -14\r\n"));
+                telnet?.Send(ASCIIEncoding.ASCII.GetBytes("set /sim/current-view/pitch-offset-deg 3\r\n"));
+                telnet?.Close();
+                telnet?.Dispose();
             }
             catch
             {
@@ -73,7 +73,7 @@ namespace ex1
         {
             try
             {
-                this.playback.Send(ASCIIEncoding.ASCII.GetBytes(line + "\r\n"));
+                this.playback?.Send(ASCIIEncoding.ASCII.GetBytes(line + "\r\n"));
                 return true;
             }
             catch
@@ -84,8 +84,8 @@ namespace ex1
 
         public void Close()
         {
-            this.playback.Close();
-            this.playback.Dispose();
+            this.playback?.Close();
+            this.playback?.Dispose();
         }
     }
 }

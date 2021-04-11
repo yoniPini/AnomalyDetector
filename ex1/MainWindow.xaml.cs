@@ -194,7 +194,7 @@ namespace ex1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            bool isYoni = true;
+            bool isYoni = false;
             if (isYoni)
             {
                 this.FG_Path_TextBox.Text = @"C:\Program Files\FlightGear 2020.3.6\bin\fgfs.exe";

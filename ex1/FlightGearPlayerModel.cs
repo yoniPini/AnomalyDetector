@@ -30,11 +30,12 @@ namespace ex1
         public string LearnCsv_Path { get; set; }
         public string TestCsv_Path { get; set; }
 
-        public bool IsPowerOn =>  this.fgAdapter != null;
+        public bool IsPowerOn => (this.fgAdapter != null);// && !this.shouldWaitForFgAdapter;
+       // public bool IsPowerOff =>  (this.fgAdapter == null ) && !this.shouldWaitForFgAdapter;
 
         private bool isRunningNow;
         public bool IsRunning { get { return isRunningNow; } set {
-                if (isRunningNow == value) return;
+                //if (isRunningNow == value) return;
                 if (value)
                     Play();
                 else
@@ -90,7 +91,8 @@ namespace ex1
         }
         private void NotifyPropertyChanged(params string[] propertyNames)
         {
-            foreach (var name in propertyNames)
+            //if (timer == null || fgAdapter == null || ts == null) return;
+                foreach (var name in propertyNames)
                 this.PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(name));
         }
         private void UpdateSpeed()
@@ -100,6 +102,7 @@ namespace ex1
             double timeBetweenFrames = 1000 / framesPerSeconds;
             this.timer.Interval = timeBetweenFrames;
         }
+        private bool shouldWaitForFgAdapter = true;
         public void Play() {
             if (timer == null || fgAdapter == null || ts == null)
             {
@@ -107,20 +110,40 @@ namespace ex1
                 timer.Elapsed += delegate (object sender, ElapsedEventArgs e) {
                     this.CurrentTimeStep++; };
                 fgAdapter = new FgAdapter(new FileDetails(this.FG_Path).OnlyPath);
-                fgAdapter.Start(new FileDetails(this.XML_Path).NameWithoutExtension);
+
                 this.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
                 {
-                    if (e.PropertyName == "CurrentTimeStep")
+                    if (e.PropertyName == "CurrentTimeStep" && ts != null)
                     this.fgAdapter?.SendPlayback(ts.getRowAsString(CurrentTimeStep));
                 };
-                fgAdapter.OnFGClosing += delegate () { this.IsPaused = true;
+                fgAdapter.OnFGClosing += delegate () { 
                                                        this.fgAdapter = null;
+                                                       CloseFG();
                                                     };
                 ts = new TableSeries(this.TestCsv_Path, Utils.ParseFeaturesLine(this.XML_Path));
-                NotifyPropertyChanged("MaxTimeStep", "AllFeaturesList", "IsPowerOn");
+
+                this.shouldWaitForFgAdapter = true;
+                new System.Threading.Thread(delegate ()
+                {
+                    fgAdapter?.Start(new FileDetails(this.XML_Path).NameWithoutExtension);
+                    if (timer == null || fgAdapter == null || ts == null)
+                    {
+                        currTimeStep = 0;
+                        timer?.Stop();
+                    } else
+                    {
+                        this.shouldWaitForFgAdapter = false;
+                        UpdateSpeed();
+                        timer?.Start();
+                    }
+                }).Start();
+                NotifyPropertyChanged("MaxTimeStep", "AllFeaturesList");
+                NotifyPropertyChanged("IsPowerOn");
             }
+
+            if (shouldWaitForFgAdapter) return;
             UpdateSpeed();
-            timer.Start();
+            timer?.Start();
         }
 
         
