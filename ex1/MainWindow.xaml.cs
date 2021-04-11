@@ -87,6 +87,23 @@ namespace ex1
                 };
             };
 
+            FilterFeatures_TextBox.LostFocus += delegate (object s, RoutedEventArgs e)
+                {
+                    var x = FilterFeatures_TextBox.Text?.Trim(' ', '\t') ?? "";
+                    if (x == "")
+                    {
+                        FilterFeatures_TextBox.Text = "";
+                        FilterHintLabel.Visibility = Visibility.Visible;
+                    }
+                    //else
+                    //{
+                    //    FilterHintLabel.Visibility = Visibility.Hidden;
+                    //}
+                };
+            FilterFeatures_TextBox.GotFocus += delegate (object s, RoutedEventArgs e)
+            {
+                FilterHintLabel.Visibility = Visibility.Hidden;
+            };
             this.Closed += delegate (object sender, EventArgs e) { FG_Player_VM.CloseFG(); };
         }
         
