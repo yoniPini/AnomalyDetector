@@ -110,11 +110,6 @@ namespace ex1
                 PlotModelF1AndF2.ResetAllAxes();
                 Feature1And2Graph.InvalidatePlot();
             };
-            try
-            {
-                string appPath = System.AppDomain.CurrentDomain.BaseDirectory;
-                this.Icon = new BitmapImage(new Uri(appPath + "icon.png"));
-            } catch { }
         }
         
         private void SetUpFeature1Graph()
