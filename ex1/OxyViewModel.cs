@@ -14,9 +14,11 @@ namespace ex1
     {
         private IAnomalyGraphModel anomalyGraphModel;
         string property;
+        string legend;
         private LineSeries ls;
         private ScatterSeries normal;
         private ScatterSeries aNormal;
+        private FunctionSeries objectCor;
         private LinearAxis leftAxis = new LinearAxis()
         {
             Position = AxisPosition.Left,
@@ -58,9 +60,27 @@ namespace ex1
             get { return leftAxis; }
         }
 
-        public string LegendTitle
+
+        public string Legend
         {
-            get { return null; }
+            get
+            {
+                return legend;
+            }    
+        }
+
+        public bool IsFeature2Exists
+        {
+            get
+            { return anomalyGraphModel.IsFeature2Exists; }
+        }
+
+        public Series CorrelationObject
+        {
+            get
+            {
+                return objectCor;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -70,16 +90,46 @@ namespace ex1
             switch (property)
             {
                 case "Feature1Traces":
+                    legend = anomalyGraphModel.Feature1;
                     feature1Update();
                     break;
                 case "Feature2Traces":
+                    legend = anomalyGraphModel.Feature2;
                     feature2Update();
                     break;
                 case "Features1And2":
-                    bothFeatures1Update();
+                    legend = anomalyGraphModel.Feature1 + "\n" + anomalyGraphModel.Feature2;
+                    UpdateObjectCor();
+                    bothFeaturesUpdate();
                     break;
                 default:
                     break;
+            }
+        }
+
+        private static double CenterCircleYPlus(double x0, double y0, double x, double r)
+        {
+            return y0 + Math.Sqrt(Math.Pow(r, 2) - Math.Pow(x - x0, 2));
+        }
+
+        private static double CenterCircleYMinus(double x0, double y0, double x, double r)
+        {
+            return y0 - Math.Sqrt(Math.Pow(r, 2) - Math.Pow(x - x0, 2));
+        }
+
+        private void UpdateObjectCor()
+        {
+            var c = anomalyGraphModel.CorrelationObject as DLL.Circle;
+            if (c != null)
+            {
+                Func<double, double> FirstHalfcircle = (x) => CenterCircleYPlus(c.x, c.y, x, c.r);
+                Func<double, double> SecondtHalfcircle = (x) => CenterCircleYMinus(c.x, c.y, x, c.r);
+            }
+            var l = anomalyGraphModel.CorrelationObject as DLL.Line;
+            if (l != null)
+            {
+                LineSeries line = new LineSeries();
+
             }
         }
 
@@ -101,7 +151,7 @@ namespace ex1
                 ls.Points.Add(new DataPoint(item.x, item.y));
         }
 
-        private void bothFeatures1Update()
+        private void bothFeaturesUpdate()
         {
             var list = anomalyGraphModel.Features1And2;
             normal.Points.Clear();
@@ -115,11 +165,14 @@ namespace ex1
         }
 
 
+
+        
         public OxyViewModel(IAnomalyGraphModel a, string p)
         {
             
             ls = new LineSeries();
             ls.Color = OxyColors.Blue;
+            //setCorrectLegend();
             //thickness
             normal = new ScatterSeries();
             normal.MarkerFill = OxyColors.Blue;
@@ -130,6 +183,8 @@ namespace ex1
             aNormal.MarkerFill = OxyColors.Red;
             aNormal.MarkerStrokeThickness = 0.05;
             aNormal.MarkerType = MarkerType.Circle;
+
+            objectCor = new FunctionSeries();
 
             anomalyGraphModel = a;
             property = p;

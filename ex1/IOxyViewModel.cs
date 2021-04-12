@@ -24,8 +24,13 @@ namespace ex1
         ScatterSeries ANormal { get; }
         LinearAxis BottomAxis { get; }
         LinearAxis LeftAxis { get; }
-        String LegendTitle { get; }
 
+        string Legend { get; } 
+        bool IsFeature2Exists { get; }
+        Series CorrelationObject { get; }
+
+        
+        
         // INotifyPropertyChanged:
         // event PropertyChangedEventHandler PropertyChanged;
 

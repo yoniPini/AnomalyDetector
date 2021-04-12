@@ -55,7 +55,13 @@ namespace ex1
             this.OxyViewModel_VM_F1 = new OxyViewModel(anomalyGraphModel, f1);
             this.OxyViewModel_VM_F2 = new OxyViewModel(anomalyGraphModel, f2);
             this.OxyViewModel_VM_F1AndF2 = new OxyViewModel(anomalyGraphModel, f1Andf2);
-            
+            ToolTipStr = new Dictionary<string, string>()
+            {
+                {"F1", null },
+                {"F2", null },
+                {"F1AndF2", null },
+            };
+
             InitializeComponent();
             
             SetUpFeature1Graph();
@@ -110,11 +116,45 @@ namespace ex1
                 PlotModelF1AndF2.ResetAllAxes();
                 Feature1And2Graph.InvalidatePlot();
             };
+            
+            Feature1Graph.MouseLeave += delegate (object s, MouseEventArgs e)
+            {
+                PlotModelF1.ResetAllAxes();
+                Feature1Graph.InvalidatePlot();
+            };
+            
+            Feature2Graph.MouseLeave += delegate (object s, MouseEventArgs e)
+            {
+                PlotModelF2.ResetAllAxes();
+                Feature2Graph.InvalidatePlot();
+            };
         }
         
+        private string AdjustLegendTitle(string s)
+        {
+            if (s?.Length > 14)
+                return s.Substring(0, 14) + "...";
+            return s;
+        }
+
+        private void SetUpLegendProperties(PlotModel p)
+        {
+            p.LegendOrientation = LegendOrientation.Horizontal;
+            p.LegendPlacement = LegendPlacement.Outside;
+            p.LegendPosition = LegendPosition.TopRight;
+            p.LegendBackground = OxyColor.FromAColor(200, OxyColors.White);
+            p.LegendBorder = OxyColors.Black;
+            p.LegendTitleFontWeight = 0;
+            p.LegendMaxHeight = 30;
+            p.LegendMaxWidth = 100;
+            p.LegendMargin = 5;
+            p.LegendSymbolMargin = 5;
+        }
+
         private void SetUpFeature1Graph()
         {
             PlotModelF1 = new PlotModel();
+            SetUpLegendProperties(PlotModelF1);
             PlotModelF1.Axes.Add(OxyViewModel_VM_F1.LeftAxis);
             PlotModelF1.Axes.Add(OxyViewModel_VM_F1.BottomAxis);
             OxyViewModel_VM_F1.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
@@ -123,11 +163,28 @@ namespace ex1
                     UpdateFeatures1Graph();
             };
         }
+
+        public Dictionary<string, string> ToolTipStr{ get; }
+
+
+        private void NotifyPropertyChanged(params string[] propertyNames)
+        {
+            foreach (var name in propertyNames)
+                this.PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(name));
+        }
+
         private void UpdateFeatures1Graph()
         {
             Series ls = OxyViewModel_VM_F1.Ls;
             if (ls != null)
             {
+                if (ToolTipStr["F1"] != OxyViewModel_VM_F1.Legend)
+                {
+                    ToolTipStr["F1"] = OxyViewModel_VM_F1.Legend;
+                    NotifyPropertyChanged("ToolTipStr");
+                }
+                 //   Feature1Graph.ToolTip = OxyViewModel_VM_F1.Legend;
+                PlotModelF1.LegendTitle = AdjustLegendTitle(OxyViewModel_VM_F1.Legend);
                 PlotModelF1.Series.Remove(ls);
                 PlotModelF1.Series.Add(ls);
                 Feature1Graph.InvalidatePlot(true);
@@ -137,8 +194,10 @@ namespace ex1
         private void SetUpFeature2Graph()
         {
             PlotModelF2 = new PlotModel();
+            SetUpLegendProperties(PlotModelF2);
             PlotModelF2.Axes.Add(OxyViewModel_VM_F2.LeftAxis);
             PlotModelF2.Axes.Add(OxyViewModel_VM_F2.BottomAxis);
+            
             OxyViewModel_VM_F2.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 if (e.PropertyName == f2)
@@ -150,6 +209,21 @@ namespace ex1
             Series ls = OxyViewModel_VM_F2.Ls;
             if (ls != null)
             {
+                if (OxyViewModel_VM_F2.IsFeature2Exists)
+                {
+                    PlotModelF2.LegendTitle = AdjustLegendTitle(OxyViewModel_VM_F2.Legend);
+                    if (ToolTipStr["F2"] != OxyViewModel_VM_F2.Legend)
+                    {
+                        ToolTipStr["F2"] = OxyViewModel_VM_F2.Legend;
+                        NotifyPropertyChanged("ToolTipStr");
+                    }
+                }
+                else
+                {
+                    PlotModelF2.LegendTitle = "cor undetected";
+
+                }
+                //PlotModelF2.TitleToolTip = OxyViewModel_VM_F2.Legend;
                 PlotModelF2.Series.Remove(ls);
                 PlotModelF2.Series.Add(ls);
                 Feature2Graph.InvalidatePlot(true);
@@ -159,6 +233,7 @@ namespace ex1
         private void SetUpFeature1AndF2Graph()
         {
             PlotModelF1AndF2 = new PlotModel();
+            SetUpLegendProperties(PlotModelF1AndF2);
             PlotModelF1AndF2.Axes.Add(OxyViewModel_VM_F1AndF2.LeftAxis);
             PlotModelF1AndF2.Axes.Add(OxyViewModel_VM_F1AndF2.BottomAxis);
             OxyViewModel_VM_F1AndF2.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
@@ -173,6 +248,22 @@ namespace ex1
             Series ls2 = OxyViewModel_VM_F1AndF2.ANormal;
             if (ls != null && ls2 != null)
             {
+                if (ToolTipStr["F1AndF2"] != OxyViewModel_VM_F1AndF2.Legend && OxyViewModel_VM_F1AndF2.IsFeature2Exists)
+                {
+                    var s = OxyViewModel_VM_F1AndF2.Legend.Split('\n');
+                    
+                    ToolTipStr["F1AndF2"] ="X: " + s[0] + "\n" +"Y: " + s[1];
+                    NotifyPropertyChanged("ToolTipStr");
+                }
+                else if (!OxyViewModel_VM_F1AndF2.IsFeature2Exists && ToolTipStr["F1AndF2"] != "no correlation")
+                {
+                    ToolTipStr["F1AndF2"] = "no correlation";
+                    NotifyPropertyChanged("ToolTipStr");
+                }
+
+                
+
+                //PlotModelF1AndF2.TitleToolTip = "x: " + OxyViewModel_VM_F1.Legend + "\ny: " + OxyViewModel_VM_F2.Legend;
                 PlotModelF1AndF2.Series.Remove(ls);
                 PlotModelF1AndF2.Series.Remove(ls2);
                 PlotModelF1AndF2.Series.Add(ls);
