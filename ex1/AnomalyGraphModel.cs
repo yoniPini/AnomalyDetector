@@ -190,7 +190,7 @@ namespace ex1
 public object CorrelationObject { 
             get {
                 if (CurrDetector == null || String.IsNullOrWhiteSpace(Feature1)) return null;
-                return CurrDetector.MostCorrelativeWith(Feature1).objectOfCorrelation;
+                return CurrDetector.MostCorrelativeWith(Feature1)?.objectOfCorrelation;
             }
         }
         public string CorrelationObjectType {

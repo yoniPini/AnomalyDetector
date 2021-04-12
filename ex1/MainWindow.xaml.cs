@@ -221,7 +221,11 @@ namespace ex1
                 else
                 {
                     PlotModelF2.LegendTitle = "cor undetected";
-
+                    if (ToolTipStr["F2"] != "no correlation")
+                    {
+                        ToolTipStr["F2"] = "no correlation";
+                        NotifyPropertyChanged("ToolTipStr");
+                    }
                 }
                 //PlotModelF2.TitleToolTip = OxyViewModel_VM_F2.Legend;
                 PlotModelF2.Series.Remove(ls);
@@ -246,6 +250,7 @@ namespace ex1
         {
             Series ls = OxyViewModel_VM_F1AndF2.Normal;
             Series ls2 = OxyViewModel_VM_F1AndF2.ANormal;
+            Series ls3 = OxyViewModel_VM_F1AndF2.CorrelationObject;
             if (ls != null && ls2 != null)
             {
                 if (ToolTipStr["F1AndF2"] != OxyViewModel_VM_F1AndF2.Legend && OxyViewModel_VM_F1AndF2.IsFeature2Exists)
@@ -266,12 +271,15 @@ namespace ex1
                 //PlotModelF1AndF2.TitleToolTip = "x: " + OxyViewModel_VM_F1.Legend + "\ny: " + OxyViewModel_VM_F2.Legend;
                 PlotModelF1AndF2.Series.Remove(ls);
                 PlotModelF1AndF2.Series.Remove(ls2);
+                PlotModelF1AndF2.Series.Remove(ls3);
                 PlotModelF1AndF2.Series.Add(ls);
                 PlotModelF1AndF2.Series.Add(ls2);
+                if (ShowCorObject_CheckBoxIsChecked == true)
+                    PlotModelF1AndF2.Series.Add(ls3);
                 Feature1And2Graph.InvalidatePlot(true);
             }
         }
-
+        public bool ShowCorObject_CheckBoxIsChecked { get; set; }
         private void SpeedTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             KeyConverter kc = new KeyConverter();
@@ -335,7 +343,7 @@ namespace ex1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            bool isYoni = true;
+            bool isYoni = false;
             if (isYoni)
             {
                 this.FG_Path_TextBox.Text = @"C:\Program Files\FlightGear 2020.3.6\bin\fgfs.exe";
@@ -348,7 +356,7 @@ namespace ex1
                 //this is only to be fast:
                 this.FG_Path_TextBox.Text = @"C:\Program Files\FlightGear_2020.3.6\bin\fgfs.exe";
                 this.LearnCsv_Path_TextBox.Text = @"C:\Users\EhudV\Desktop\ap2_ex1\reg_flight.csv";
-                this.TestCsv_Path_TextBox.Text = @"C:\Users\EhudV\Desktop\ap2_ex1\reg_flight.csv";
+                this.TestCsv_Path_TextBox.Text = @"C:\Users\EhudV\Desktop\ap2_ex1\anomaly_flight.csv";
                 this.XML_Path_TextBox.Text = @"C:\Users\EhudV\Desktop\ap2_ex1\playback_small.xml";
             }
             //MessageBox.Show(this.FG_Player_VM.VM_SpeedTimes.ToString());
@@ -362,23 +370,39 @@ namespace ex1
         {
             var path = Utils.GetFilePathFromUserGUI("Anomaly Detecion algorithim", "*.dll");
 
-            if (String.IsNullOrWhiteSpace(path) || !System.IO.File.Exists(path)) { 
+            if (String.IsNullOrWhiteSpace(path) || !System.IO.File.Exists(path))
+            {
                 MessageBox.Show("No dll was choosen.");
                 return;
             }
             var s = this.AnomalySelect_VM.LoadDetectorFromDll(path);
             if (String.IsNullOrWhiteSpace(s))
             {
-                MessageBox.Show("Unable to load the dll, or read the csv files.");
+                MessageBox.Show("Unable to load the dll.");
+                return;
             }
-           // Detectors_ComboBox.Items.Add(.NameWithoutExtension);
-            Detectors_ComboBox.Items.Add(new ComboBoxItem() { 
+            Detectors_ComboBox.Items.Add(new ComboBoxItem()
+            {
                 Content = new FileDetails(path).OnlyFullName,
-                ToolTip = s + "\n\nLoaded from :\n" + path});
+                ToolTip = s + "\n\nLoaded from :\n" + path
+            });
 
-            //  |w| < p(|<M, x>|)
+            AddedDetectorLabelsVisibility = Visibility.Visible;
+            new System.Threading.Thread(delegate () {
+                System.Threading.Thread.Sleep(5000);
+                AddedDetectorLabelsVisibility = Visibility.Hidden;
+            }).Start();
+        }
+        private Visibility m_AddedDetectorLabelsVisibility = Visibility.Hidden;
+        public Visibility AddedDetectorLabelsVisibility
+        {
+            get { return m_AddedDetectorLabelsVisibility; }
 
-            //  (<M', x'>, 1) not in R
+            set
+            {
+                m_AddedDetectorLabelsVisibility = value;
+                NotifyPropertyChanged("AddedDetectorLabelsVisibility");
+            }
         }
     }
 }

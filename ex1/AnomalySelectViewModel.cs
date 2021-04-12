@@ -32,10 +32,16 @@ namespace ex1
         public int VM_SelectedDetectorIdx
         {
             get { return model.SelectedDetectorIdx; }
-            set { model.SelectedDetectorIdx = value;
-                model.Analyze();
+            set
+            {
+                model.SelectedDetectorIdx = value;
+                if (!model.Analyze() && value != 0)
+                {
+                    System.Windows.MessageBox.Show("Unable to read the csv files.");
+                    model.SelectedDetectorIdx = 0;
+                }
             }
-        }        //x.DefaultFeatures; x.Detect; x.Learn;
+        }         //x.DefaultFeatures; x.Detect; x.Learn;
         public string LoadDetectorFromDll(string fromDllPath)
         {
             return model.LoadDetectorFromDll(fromDllPath);
