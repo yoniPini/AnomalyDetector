@@ -140,6 +140,7 @@ namespace ex1
                 objectCor.Points.AddRange(list.Points);
                 var list2 = new FunctionSeries(SecondtHalfcircle, c.x - c.r, c.x + c.r, 0.001);
                 objectCor.Points.AddRange(list2.Points);
+                return;
             }
             var l = anomalyGraphModel.CorrelationObject as DLL.Line;
             if (l != null)
@@ -155,7 +156,13 @@ namespace ex1
                 maxX += dist * 0.7f;
                 objectCor.Points.Add(new DataPoint(minX, l.f(minX)));
                 objectCor.Points.Add(new DataPoint(maxX, l.f(maxX)));
+                return;
             }
+
+            var o = anomalyGraphModel.CorrelationObject as DLL.IOxyPlotDrawable;
+            var listPoints = o?.GetShape();
+            if (listPoints != null)
+                objectCor.Points.AddRange(listPoints);
         }
 
         private void feature1Update()
