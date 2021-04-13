@@ -35,10 +35,13 @@ namespace ex1
             set
             {
                 model.SelectedDetectorIdx = value;
-                if (!model.Analyze() && value != 0)
+                if (!this.Analyze() && value != 0)
                 {
                     System.Windows.MessageBox.Show("Unable to read the csv files.");
                     model.SelectedDetectorIdx = 0;
+                } else
+                {
+                    model.SelectedDetectorIdx = value; // to update view
                 }
             }
         }         //x.DefaultFeatures; x.Detect; x.Learn;
@@ -46,7 +49,9 @@ namespace ex1
         {
             return model.LoadDetectorFromDll(fromDllPath);
         }
-        public bool Analyze() { return model.Analyze(); }
+        public bool Analyze() { 
+            return model.Analyze(); 
+        }
         public string VM_Feature1
         {
             get { return model.Feature1; }

@@ -136,9 +136,9 @@ namespace ex1
             {
                 Func<double, double> FirstHalfcircle = (x) => CenterCircleYPlus(c.x, c.y, x, c.r);
                 Func<double, double> SecondtHalfcircle = (x) => CenterCircleYMinus(c.x, c.y, x, c.r);
-                var list = new FunctionSeries(FirstHalfcircle, c.x - c.r, c.x + c.r, 0.001);
+                var list = new FunctionSeries(FirstHalfcircle, c.x - c.r, c.x + c.r, c.r / 100);
                 objectCor.Points.AddRange(list.Points);
-                var list2 = new FunctionSeries(SecondtHalfcircle, c.x - c.r, c.x + c.r, 0.001);
+                var list2 = new FunctionSeries(SecondtHalfcircle, c.x - c.r, c.x + c.r, c.r /100);
                 objectCor.Points.AddRange(list2.Points);
                 return;
             }

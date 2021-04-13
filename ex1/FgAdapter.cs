@@ -37,7 +37,8 @@ namespace ex1
                                 " --generic=socket,in,10,127.0.0.1," + dataPort + ",tcp," + protocolName +
                                 " --fdm=null --prop:/sim/sound/voices/enabled=false" +
                                 " --prop:/sim/view[1]/enabled=true --geometry=750x500" +
-                                " --telnet=socket,in,10,127.0.0.1," + telnetPort + ",tcp --disable-ai-models";
+                                " --telnet=socket,in,10,127.0.0.1," + telnetPort + ",tcp" +
+                                " --disable-ai-models --disable-sound";
 
             var psi = new ProcessStartInfo(this.fgPath + "fgfs.exe", FGargs);
             psi.WorkingDirectory = this.fgPath;

@@ -23,6 +23,7 @@ namespace ex1
                 if (e.PropertyName == "CurrentTimeStep") 
                     NotifyPropertyChanged("Feature1Traces", "Feature2Traces", "Features1And2");
                 if (e.PropertyName == "IsPowerOn") this.updatedDetectors.Clear();
+                //if (e.PropertyName == "IsRunning") this.SelectedDetectorIdx = SelectedDetectorIdx;
             };
             this.detectorsManager = new AnomalyDetectorsManager();
             this.detectorsManager.AddAnomalyDetector(AnomalyDetectorsManager.EmptyAnomalyDetector);
@@ -30,19 +31,23 @@ namespace ex1
         }
         public List<string> AllFeaturesList { get { return this.fgModel.AllFeaturesList; } }
 
-       // private int m_selectedDetectorIndex = -1;
+        // private int m_selectedDetectorIndex = -1;
+       // int debug = 0;
         public int SelectedDetectorIdx
         {
             get { return detectorsManager.CurrentDetectorIdx; }
             set {
+               // debug = 1;
                 if (detectorsManager.CurrentDetectorIdx == value || value < 0 || value >= detectorsManager.Detectors.Count)
+                {
+                    this.Feature1 = this.Feature1;
                     return;
-                detectorsManager.CurrentDetectorIdx = value;
-
-                NotifyPropertyChanged("SelectedDetectorIdx", "Feature1", "IsFeature2Exists",
-                               "Feature2", "CorrelationObject", "CorrelationObjectType");
-                NotifyPropertyChanged("Feature1Traces", "Feature2Traces", "Features1And2");
                 }
+                detectorsManager.CurrentDetectorIdx = value;
+                this.Feature1 = this.Feature1;
+                NotifyPropertyChanged("SelectedDetectorIdx");
+                //currentFeature1AnomaliesTimeStep = new HashSet<long>();
+            }
         }
         /*
          */
@@ -75,7 +80,20 @@ namespace ex1
         private HashSet<long> currentFeature1AnomaliesTimeStep = new HashSet<long>();
         public string Feature1 { get { return feature1; }
             set {
-                 if (value == feature1 || !AllFeaturesList.Contains(value)) return;
+                //if (value == feature1 || !AllFeaturesList.Contains(value)) return;
+               // if (debug == 1)
+                //{
+                  //  debug = 0;
+                   // System.Windows.MessageBox.Show("a");
+               // }
+                if (!AllFeaturesList.Contains(value)) {
+                    feature1 = "";
+                    currentFeature1AnomaliesTimeStep = new HashSet<long>();
+                    NotifyPropertyChanged("Feature1", "IsFeature2Exists",
+                                "Feature2", "CorrelationObject", "CorrelationObjectType");
+                    NotifyPropertyChanged("Feature1Traces", "Feature2Traces", "Features1And2");
+                    return; 
+                }
                  feature1 = value;
 
                  List<AnomalyReport> anomalyList;
