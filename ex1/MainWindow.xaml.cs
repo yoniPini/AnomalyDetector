@@ -341,31 +341,6 @@ namespace ex1
                 Utils.GetFilePathFromUserGUI("Flight recording file", "*.csv;*.txt;*.log");
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            bool isYoni = true;
-            if (isYoni)
-            {
-                this.FG_Path_TextBox.Text = @"C:\Program Files\FlightGear 2020.3.6\bin\fgfs.exe";
-                this.LearnCsv_Path_TextBox.Text = @"C:\Users\WIN10\OneDrive\שולחן העבודה\מסמכים של בר אילן\שנה ב\‏‏סמסטר ב\תכנות מתקדם 2\קבצים לפרויקט-20210324\reg_flight.csv";
-                this.TestCsv_Path_TextBox.Text = @"C:\Users\WIN10\OneDrive\שולחן העבודה\מסמכים של בר אילן\שנה ב\‏‏סמסטר ב\תכנות מתקדם 2\קבצים לפרויקט-20210324\anomaly_flight.csv";
-                this.XML_Path_TextBox.Text = @"C:\Program Files\FlightGear 2020.3.6\data\Protocol\playback_small.xml";
-            }
-            else
-            {
-                //this is only to be fast:
-                this.FG_Path_TextBox.Text = @"C:\Program Files\FlightGear_2020.3.6\bin\fgfs.exe";
-                this.LearnCsv_Path_TextBox.Text = @"C:\Users\EhudV\Desktop\ap2_ex1\reg_flight.csv";
-                this.TestCsv_Path_TextBox.Text = @"C:\Users\EhudV\Desktop\ap2_ex1\anomaly_flight.csv";
-                this.XML_Path_TextBox.Text = @"C:\Users\EhudV\Desktop\ap2_ex1\playback_small.xml";
-            }
-            //MessageBox.Show(this.FG_Player_VM.VM_SpeedTimes.ToString());
-            //MessageBox.Show(this.Joystick_SmallCircle.ActualHeight.ToString());
-            //var x = this.Joystick_SmallCircle.Margin;
-            //this.Joystick_SmallCircle.Margin = new Thickness(x.Left-15,x.Top, 0, 0);
-            // this.Joystick_SmallCircle.TransformToAncestor(this).Transform(new Point(9,-9));
-        }
-
         private void AddDetector_Click(object sender, RoutedEventArgs e)
         {
             var path = Utils.GetFilePathFromUserGUI("Anomaly Detecion algorithim", "*.dll");
@@ -402,6 +377,46 @@ namespace ex1
             {
                 m_AddedDetectorLabelsVisibility = value;
                 NotifyPropertyChanged("AddedDetectorLabelsVisibility");
+            }
+        }
+
+        public IFlightGearPlayerViewModel IFlightGearPlayerViewModel
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public IFlightGearPlayerViewModel IFlightGearPlayerViewModel1
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public IJoystickViewModel IJoystickViewModel
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public IAnomalyDetectorsManager IAnomalyDetectorsManager
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public IOxyViewModel IOxyViewModel
+        {
+            get => default;
+            set
+            {
             }
         }
     }

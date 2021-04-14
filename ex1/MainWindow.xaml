@@ -126,6 +126,5 @@
         <TextBox x:Name="TestCsv_Path_TextBox" HorizontalAlignment="Left" Height="22" Margin="177,99.667,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="589" IsReadOnly="True" IsUndoEnabled="False" Text="{Binding FG_Player_VM.VM_TestCsv_Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Label Content="Test \ Current Flight path :" HorizontalAlignment="Left" Margin="10,95.667,0,0" Grid.Row="2" VerticalAlignment="Top" Width="146"/>
         <Button x:Name="TestCsv_Path_Button" Content="..." HorizontalAlignment="Left" Margin="782,99.667,0,0" Grid.Row="2" VerticalAlignment="Top" Width="42" Click="TestCsv_Path_Button_Click" IsEnabled="{Binding FG_Player_VM.VM_IsPowerOff , Mode=OneWay}"/>
-        <Button Content="Debug" HorizontalAlignment="Left" Height="32" Margin="70,107.667,0,0" VerticalAlignment="Top" Width="102" Click="Button_Click" Grid.Row="2"/>
     </Grid>
 </Window>
