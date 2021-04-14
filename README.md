@@ -39,6 +39,8 @@ Folders structure :
 			ex1/publish/        installer for user-edge (see "Pre requirements" and "Installing guide")
 								all the folder is zipped in    ex1/publish/publish.zip  
 								(except to the zip itself, of course) 
+								
+			ex1/example/		example of xml flight protocol and corresponds csv files (normal and test flight)
 
 
 Pre requirements :
@@ -47,7 +49,7 @@ Pre requirements :
 			• Install FG simulator from https://www.flightgear.org/  (under their license, regardless of this project)
 			• .net FRAMEWORK 4.7.2
 			• if you will use the default plugins you should also make sure that cpp for windows installed on your pc
-				I don't excactly the compoments, but if you install "Desktop development with c++", espacilly the
+				I don't know excactly the compoments, but if you install "Desktop development with c++", espacilly the
 						"windows 10 sdk"
 						"msvc"
 						"c++ core desktop features"
@@ -85,7 +87,7 @@ Detections plugins :
 					of p/invoke(calling function convention),
 					the calling of the Learn and detect functions which was written in cpp are very slow.
 
-					see in developing section below what you need to develop you own plugin
+					see in developing section below what you need to develop your own plugin
 					(do it whole in .net framework, it faster to run)
 
 
