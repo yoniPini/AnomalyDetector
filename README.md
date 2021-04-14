@@ -113,7 +113,7 @@ Youtube link :
 
 			• Describing how the user(pilot for example) can use in this app
 				(hebrew, private link)
-				https://youtu.be/1RopGEtjjl4
+				https://youtu.be/xmPmlZ3lWq8
 
 Developing :
 
