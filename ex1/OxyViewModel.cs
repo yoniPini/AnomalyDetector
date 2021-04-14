@@ -1,4 +1,11 @@
-﻿using OxyPlot.Axes;
+﻿/**
+ * this class is responsible for supllying the relevant data according the given string property.
+ * for example' when given "Feature1Traces", this class will keep listening only to the events
+ * that relevant to the first feature to keep the grapg updated .
+ * As said before this class listen to another class which represent a dort of model as the MVVM
+ * structure tells.
+ */
+using OxyPlot.Axes;
 using OxyPlot.Series;
 using OxyPlot;
 using System;
@@ -19,6 +26,9 @@ namespace ex1
         private ScatterSeries normal;
         private ScatterSeries aNormal;
         private LineSeries objectCor;
+        /**
+         * the axes are the same for all Graphs.
+         */
         private LinearAxis leftAxis = new LinearAxis()
         {
             Position = AxisPosition.Left,
@@ -60,7 +70,6 @@ namespace ex1
             get { return leftAxis; }
         }
 
-
         public string Legend
         {
             get
@@ -85,6 +94,8 @@ namespace ex1
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /*
+         * this method pulls the relevant data from the modelClass befores updating the listeners of a changed prorerty. */
         private void setCorrectOption()
         {
             switch (property)
@@ -107,6 +118,7 @@ namespace ex1
             }
         }
 
+
         private static double CenterCircleYPlus(double x0, double y0, double x, double r)
         {
             return y0 + Math.Sqrt(Math.Pow(r, 2) - Math.Pow(x - x0, 2));
@@ -117,19 +129,13 @@ namespace ex1
             return y0 - Math.Sqrt(Math.Pow(r, 2) - Math.Pow(x - x0, 2));
         }
 
-        //private long last = 0;
+        /*
+         * set the objectCor field with the correct shape to draw, a line or ta circle. in case of an other shapes
+         * the person who gives the DLL file should implement the IOxyPlotDrawable interface to get from him a llist of points
+         * to draw lines between them. under that manner rounded shapes are NOT supported.
+         */
         private void UpdateObjectCor()
         {
-            //if (last - System.DateTime.Now.Ticks <= 10000 * 300)
-            //{
-              //  last = System.DateTime.Now.Ticks;
-                //return;
-            //}
-            //last = System.DateTime.Now.Ticks;
-            //objectCor.Points.Clear();
-            //objectCor.Points.Add(new DataPoint(-1000, -1000));
-            //objectCor.Points.Add(new DataPoint(1000, 1000));
-            //return;
             objectCor.Points.Clear();
             var c = anomalyGraphModel.CorrelationObject as DLL.Circle;
             if (c != null)
@@ -167,8 +173,6 @@ namespace ex1
 
         private void feature1Update()
         {
-            //ls.Points.Add(new DataPoint(5, 6)); // debug
-            
             var list = anomalyGraphModel.Feature1Traces;
             ls.Points.Clear();
             foreach (var item in list)
@@ -195,13 +199,13 @@ namespace ex1
                     aNormal.Points.Add(new ScatterPoint(item.x, item.y));
             }
         }
-
-
-
-        
+               
+        /*
+         * the constructor gets a string p that changes the behavior of the instance accordingly (further details in setup method).
+         * It also initialize the fields with the same values (exept property) since it dont matter from one instance to another.
+         */
         public OxyViewModel(IAnomalyGraphModel a, string p)
         {
-            
             ls = new LineSeries();
             ls.Color = OxyColors.Blue;
             //setCorrectLegend();
@@ -216,11 +220,8 @@ namespace ex1
             aNormal.MarkerStrokeThickness = 0.005;
             aNormal.MarkerType = MarkerType.Circle;
 
-            objectCor = new LineSeries();//new FunctionSeries();
+            objectCor = new LineSeries();
             objectCor.Color = OxyColors.Black;
-
-            //objectCor.MarkerStrokeThickness = 0.005;
-            //objectCor.MarkerType = MarkerType.Diamond;
 
             anomalyGraphModel = a;
             property = p;
@@ -233,6 +234,5 @@ namespace ex1
                 }
             };
         }
-
     }
 }

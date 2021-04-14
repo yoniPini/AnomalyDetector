@@ -1,6 +1,6 @@
 ﻿/**
- * this class is responsible for supllying the relrvant data according the given string property.
- * for example' when given "Feature1Traces" 
+ * every class who implements this interface behaves differently according the parameters given in the constructor.
+ * this interface ensures to have properties to draw graphs, i.e. axis line/scatter series and a legend.
  */
 
 
@@ -20,25 +20,18 @@ namespace ex1
 {
     public interface IOxyViewModel : INotifyPropertyChanged
     {
-
         // model: graphModel: SpecialPoint -> 
         // view-model: IOxyViewModel: LineSeries ->
         // view :MainWindow -> SetUp(oxyViewModel)
-        LineSeries Ls { get; }
+        LineSeries Ls { get; } // relevant for  feature1Traces, and also for feature2Traces.
         //in the IMPLEMENTATION : private IAnomalyGraphModel graphModel;
-        ScatterSeries Normal { get; }
-        ScatterSeries ANormal { get; }
+        ScatterSeries Normal { get; } //relevant for  feature1And2.
+        ScatterSeries ANormal { get; } //relevant for  feature1And2.
         LinearAxis BottomAxis { get; }
         LinearAxis LeftAxis { get; }
 
         string Legend { get; } 
         bool IsFeature2Exists { get; }
         Series CorrelationObject { get; }
-
-        
-        
-        // INotifyPropertyChanged:
-        // event PropertyChangedEventHandler PropertyChanged;
-
     }
 }
