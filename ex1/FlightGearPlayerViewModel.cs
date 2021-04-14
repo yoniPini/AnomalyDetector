@@ -7,6 +7,9 @@ using System.ComponentModel;
 
 namespace ex1
 {
+    // class which is between the view and the IFlightGearPlayerModel,
+    // to give data to the view about current state of the playing(timestep, for example)
+    // and to give the IFlightGearPlayerModel commands / data such as VM_FG_Path (bound to textbox in view)
     public class FlightGearPlayerViewModel : IFlightGearPlayerViewModel
     {
         public double Const_OriginalHz { get { return model.Const_OriginalHz; } }
@@ -21,7 +24,7 @@ namespace ex1
             set {
                 if (value == VM_IsRunning) return ;
                 if (value == true)
-                    Play();
+                    Play();                 // do checks and not only model.IsRunning = true;
                 else
                     model.IsRunning = false;
                     } 
@@ -39,7 +42,7 @@ namespace ex1
 
         public event PropertyChangedEventHandler PropertyChanged;
         private IFlightGearPlayerModel model;
-        public FlightGearPlayerViewModel(IFlightGearPlayerModel model) { // to add > model
+        public FlightGearPlayerViewModel(IFlightGearPlayerModel model) {
             this.model = model;
             model.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e) {
                 NotifyPropertyChanged("VM_" + e.PropertyName);
@@ -51,14 +54,20 @@ namespace ex1
             foreach (var name in propertyNames)
                 this.PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(name));
         }
+        
+        // before active IsRunning of the IFlightGearPlayer check the 4 paths are valid and correct
         public void Play()
         {
+            // check 4 path are exist
+            // (if exist then they valid because we got them from dialogOpen in view[using Utils class])
             if (this.VM_FG_Path == "" || this.VM_XML_Path == "" ||
                         this.VM_LearnCsv_Path == "" || this.VM_TestCsv_Path == "")
             {
                 System.Windows.MessageBox.Show("Please fill all the 4 paths below.");
                 return;
             }
+            // check that there is correspond xml record protocol IN THE data\Protocol folder of flight gear
+            // (assuming VM_FG_Path is correct)
             var fgMainFolder = new FileDetails(VM_FG_Path).OnlyPath + "..\\";
             var protocolsFolder = fgMainFolder + @"data\Protocol\";
             var xml = new FileDetails(VM_XML_Path);
@@ -73,6 +82,7 @@ namespace ex1
                 catch { }
                 return;
             }
+            // if all the checks succeded, play the model
             this.model.IsRunning = true;
         }
         public void CloseFG()

@@ -7,6 +7,8 @@ using System.ComponentModel;
 
 namespace ex1
 {
+    // interface of current[meaning, according to the current time step in IFlightGearPlayerModel]
+    // 4 needed features values for the joystick
     public class JoystickModel : IJoystickModel
     {
         public float aileron

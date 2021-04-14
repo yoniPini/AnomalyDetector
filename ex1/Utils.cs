@@ -9,6 +9,8 @@ using System.IO;
 using System.Windows;
 namespace ex1
 {
+
+    // class to parse and get data of file(not folder) path
     public class FileDetails
     {
         // "C:\folder1\"      : with '\' at end
@@ -33,13 +35,18 @@ namespace ex1
             this.NameWithoutExtension = fullName.Substring(0, fullName.Length - (this.Extension.Length + 1));
         }
     }
+
+
     class Utils
     {
+        // helper class
         class Pair
         {
             public int x, y;
             public Pair(int x, int y) { this.x = x; this.y = y; }
         }
+        
+        // get all the xmlelemnts(nodes of sub tree) childs which are called nameFilter
         private static List<XmlElement> GetElementsChilds(XmlNodeList nd, string nameFilter)
         {
             List<XmlElement> list = new List<XmlElement>();
@@ -53,6 +60,9 @@ namespace ex1
             }
             return list;
         }
+
+        // get all the xmlelemnts(nodes of sub tree) childs which are called nameFilter,
+        // of the given List<XmlElement>, in "one" dimension
         private static List<XmlElement> GetElementsChilds(List<XmlElement> elist, string nameFilter)
         {
             List<XmlElement> list = new List<XmlElement>();
@@ -62,6 +72,8 @@ namespace ex1
             }
             return list;
         }
+
+        // get xml protocol flight gear record path, and return the features line
         public static string ParseFeaturesLine(string xmlFile)
         {
             try
@@ -91,7 +103,7 @@ namespace ex1
                     }
                 }
 
-
+                // if there are "A" 3 times the result will be A[0],A[1],A[2] 
                 String[] array = features.ToArray();
                 for (int i = 0; i < array.Length; i++)
                     if (amountOfFeaure[array[i]].x > 0)
@@ -103,6 +115,7 @@ namespace ex1
             { return ""; }
         }
 
+        // open a dialog to get file path from user
         // example: var x = GetFileDetailsFromUserGUI("xml file", "*.xml");
         // this is for basic use with one extension
         public static String GetFilePathFromUserGUI(string descriprion, string extensionFilter)

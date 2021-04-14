@@ -8,6 +8,10 @@ using System.IO;
 
 namespace ex1
 {
+    // class to read csv and store the data.
+    //
+    // if AvoidIndexErrors = true, then default (0) values
+    // will be return where the index/feature doesn't exist
     public class TableSeries
     {
         private float[][] tableValues;
@@ -17,19 +21,21 @@ namespace ex1
         private string[] timeStepsStr;
 
         public int RowsLength { get {
-                //if (AvoidIndexErrors && tableValues == null) return 0;
                 return tableValues.Length;
             } }
         public int ColumnsLength { get {
-                //if (AvoidIndexErrors && featuresStr == null) return 0;
                 return featuresStr.Length; 
             } }
         public int FeaturesLength { get { return ColumnsLength; } }
         public bool AvoidIndexErrors { get; set; }
 
+        // get csvfile to read the data from and defaultFeatures == default title to columns,
+        // if the file first line doesnt contain it
         public TableSeries(string csvfile, string defaultFeatures = "", bool avoidIndexErrors = true)
         {
             this.AvoidIndexErrors = avoidIndexErrors;
+
+            // get file lines number
             int valuesLinesNumber = 0;
             using (FileStream fs = File.OpenRead(csvfile))
             {
@@ -39,9 +45,8 @@ namespace ex1
 
             using (FileStream fs = File.OpenRead(csvfile))
             {
+                // read first line and decide if to use it as features line or as values line
                 var sr = new StreamReader(fs);
-                //if (sr.EndOfStream)
-                //    throw new Exception("Empty file!");
                 string featuresLine = sr.ReadLine();
                 char c = featuresLine[0];
                 string values;
@@ -55,6 +60,8 @@ namespace ex1
                     values = sr.ReadLine();
                     valuesLinesNumber--;
                 }
+
+                // decide features final names
                 this.featuresStr = featuresLine.Split(',');
                 this.featuresToInt = new Dictionary<string, int>();
                 for (int k = 0; k < this.featuresStr.Length; k++)
@@ -69,6 +76,7 @@ namespace ex1
                     }
                 }
 
+                // read the data to the correct cell
                 this.timeStepsStr = new string[valuesLinesNumber];
                 this.tableValues = new float[valuesLinesNumber][];
                 for (int h = 0; h < this.tableValues.Length; h++)

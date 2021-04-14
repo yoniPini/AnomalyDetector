@@ -3,16 +3,21 @@ using System.Globalization;
 using System.Windows.Data;
 namespace ex1
 {
+    // class which was designed to become compoment in the way to show data in the xaml
+    // [using is via xaml] for example:
+
     //xaml:
-     //    xmlns:local="clr-namespace:ex1"
-
+    // 1)in the header
+    //xmlns:local="clr-namespace:ex1"
+    // 2)
     /* <Window.Resources>
-        <local:ConvertorNiceString x:Key="Precision8"/>
+        <local:FloatFormat x:Key="Precision8"/>
     </Window.Resources> */
-
-    // Text="{Binding qf, Converter={StaticResource Precision8}, Mode=OneWay}"
+    // 3)
+    // Text="{Binding ViewModel.DoubleProperty, Converter={StaticResource Precision8}, Mode=OneWay}"
     public class FloatFormat : IValueConverter
     {
+        // get double and show it as "dddd.dddd" OR "-dddd.dddd" where d are (different) digits
         private string helper(double x)
         {
             string sign = x < 0 ? "-" : "";
@@ -22,14 +27,18 @@ namespace ex1
             s = s.Insert(s.Length - 4, ".");
             return sign + s.Substring(s.Length - 9);
         }
+
+        // IValueConverter:
+
+        // for Mode=OneWay, Mode=TwoWays
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            //float s = value as float;
             if (value is float) return helper((float)value);
             if (value is double) return helper((double)value);
             return "0000.0000";
         }
 
+        // for Mode=OneWayToSource
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
