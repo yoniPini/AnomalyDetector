@@ -29,10 +29,14 @@ Folders structure :
 			ex1/ex1/			the source code for the project, also incude the icon
 
 			ex1/ex1/dll/		the dll which were made to this project
-								and have to be also, but not only, known in compile time
+								and have to be also, but not only, known in compile time.
+								see also ex1/plugins/how_created_dll/ for implementation.
 
 			ex1/plugins/		including 2 dll for detection algorithim(and dll that they use),
 								read more about it in "Detection plugin" section.
+								
+			ex1/plugins/how_created_dll/	 how the plugins were made. see also ex1/ex1/dll/
+							  were the interface is.
 
 			ex1/uml/			2 uml diagrams
 			
@@ -89,6 +93,7 @@ Detections plugins :
 
 					see in developing section below what you need to develop your own plugin
 					(do it whole in .net framework, it faster to run)
+					Anyway, you can see in  ex1/plugins/how_created_dll/  how the hybrid plugin were written (the second is similar).
 
 
 csv and xml files :
@@ -99,7 +104,7 @@ csv and xml files :
 				All the rows must have the amount of nums("feature" value), as the first line
 				The number of "featurs" and their meaning, should be as it is mentioned
 				in the valid flight gear protocol xml in the input subtree.
-				(see: reg_flight.csv, anomaly_flight.csv, playback_small.xml for example)
+				(see: reg_flight.csv, anomaly_flight.csv, playback_small.xml  all are in  ex1/example/)
 
 			• the hz of the records(lines \ timesteps) is const as 10 HZ
 			(every 10 timestep = 1 seconds, therefore speed 5 will go over 50 timesteps in seconds)
