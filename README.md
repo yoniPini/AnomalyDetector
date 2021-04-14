@@ -3,6 +3,7 @@
 Flight Inspection App, ex1, Advanced Programming 2, biu
 
 Sections :
+
 			• Introduction
 			• Folders structure
 			• Pre requirements
@@ -15,6 +16,7 @@ Sections :
 			• Further explanation (for developers)
 
 Introduction :
+
 				An app for learn and detect flight records, using graphs, stats info,
 				anomaly detection algorithims(as runtime plugins-dll)
 				
@@ -40,6 +42,7 @@ Folders structure :
 
 
 Pre requirements :
+
 			• Windows 10
 			• Install FG simulator from https://www.flightgear.org/  (under their license, regardless of this project)
 			• .net FRAMEWORK 4.7.2
@@ -51,6 +54,7 @@ Pre requirements :
 				than probably it will be enough.
 
 Installing guide :
+
 			• For user use, install FG, and afterwards copy    ex1/publish/     folder to your pc
 			  start the "setup.exe" file
 			• You can uninstall the app via control-panel (named "ex1")
@@ -58,6 +62,7 @@ Installing guide :
 			• For developers, just fork the github and work on the   ex1/ex1.sln  via visual studio 2019
 
 Detections plugins :
+
 			• The program can load Anomaly detection algorithims, each algorithim in dll file.
 			  It can be done via the "Add New Detector" button.
 			  The file must be compatible with the interface the progam excpect for.
@@ -85,6 +90,7 @@ Detections plugins :
 
 
 csv and xml files :
+
 			• the format of the csv must be float numbers,
 				seperated by comma "," and
 				"enter"(line feed) in the end of line (including last line)
@@ -97,12 +103,12 @@ csv and xml files :
 			(every 10 timestep = 1 seconds, therefore speed 5 will go over 50 timesteps in seconds)
 
 Youtube link :
+
 			• Describing how the user(pilot for example) can use in this app
 				(hebrew, private link)
 				https://youtu.be/1RopGEtjjl4
 
 Developing :
-
 
 			• changes in the code using IDE
 				you should work with visual studio 2019,
