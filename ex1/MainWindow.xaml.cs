@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * this class is THE View class. it has properties for all of the VM interfaces such as IJoystickViewModel, IAnomalySelectViewModel
+ * and more, and has data bindings to them. there are further fields manipulate other controls like plots, sliders etc.
+ * Further explanation in the code below.
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,11 +36,17 @@ namespace ex1
         private string f1 = "Feature1Traces";
         private string f2 = "Feature2Traces";
         private string f1Andf2 = "Features1And2";
+        private Visibility m_AddedDetectorLabelsVisibility = Visibility.Hidden;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /*
+         * 3 properties of Plotmodel for each of the plots.
+         */
         public PlotModel PlotModelF1 { get; set; }
         public PlotModel PlotModelF2 { get; set; }
         public PlotModel PlotModelF1AndF2 { get; set; }
         //axis  is zoom enabled
-        public event PropertyChangedEventHandler PropertyChanged;
         public IFlightGearPlayerViewModel FG_Player_VM { get; }
         public IJoystickViewModel Joystick_VM { get; }
         public ITableSeriesNotify TableListener { get; }
@@ -43,6 +54,68 @@ namespace ex1
         public IOxyViewModel OxyViewModel_VM_F1 { get; }
         public IOxyViewModel OxyViewModel_VM_F2 { get; }
         public IOxyViewModel OxyViewModel_VM_F1AndF2 { get; }
+
+
+        public IFlightGearPlayerViewModel IFlightGearPlayerViewModel
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public IFlightGearPlayerViewModel IFlightGearPlayerViewModel1
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public IJoystickViewModel IJoystickViewModel
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public IAnomalyDetectorsManager IAnomalyDetectorsManager
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public IOxyViewModel IOxyViewModel
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        
+        public Dictionary<string, string> ToolTipStr{ get; }
+        public bool ShowCorObject_CheckBoxIsChecked { get; set; }
+
+        public Visibility AddedDetectorLabelsVisibility
+        {
+            get { return m_AddedDetectorLabelsVisibility; }
+
+            set
+            {
+                m_AddedDetectorLabelsVisibility = value;
+                NotifyPropertyChanged("AddedDetectorLabelsVisibility");
+            }
+        }
+
+
+        /*
+         * the constructor. initialize the fields ,view models and part of the models to work together.
+         * sunbscribe many 'delegate' suitable events.
+         */
         public MainWindow()
         {
             var fgModel = new FlightGearPlayerModel();
@@ -55,6 +128,10 @@ namespace ex1
             this.OxyViewModel_VM_F1 = new OxyViewModel(anomalyGraphModel, f1);
             this.OxyViewModel_VM_F2 = new OxyViewModel(anomalyGraphModel, f2);
             this.OxyViewModel_VM_F1AndF2 = new OxyViewModel(anomalyGraphModel, f1Andf2);
+
+            /*
+             * this field is for the plots in order to change the legend according  the clicked character
+             */
             ToolTipStr = new Dictionary<string, string>()
             {
                 {"F1", null },
@@ -74,9 +151,6 @@ namespace ex1
                 Content = "- Not Selected -",
                 ToolTip = AnomalyDetectorsManager.EmptyAnomalyDetector.Name + "\n" + AnomalyDetectorsManager.EmptyAnomalyDetector.Description});
             Detectors_ComboBox.SelectedIndex = 0;
-            /*
-             to add 3  IOxyViewModel and to subscribe to each PropertyChanged
-             */
             AnomalySelect_VM.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e) {
                 if (e.PropertyName != "VM_AllFeaturesList") return;
                 List<string> list = AnomalySelect_VM.VM_AllFeaturesList;
@@ -101,16 +175,16 @@ namespace ex1
                         FilterFeatures_TextBox.Text = "";
                         FilterHintLabel.Visibility = Visibility.Visible;
                     }
-                    //else
-                    //{
-                    //    FilterHintLabel.Visibility = Visibility.Hidden;
-                    //}
                 };
             FilterFeatures_TextBox.GotFocus += delegate (object s, RoutedEventArgs e)
             {
                 FilterHintLabel.Visibility = Visibility.Hidden;
             };
             this.Closed += delegate (object sender, EventArgs e) { FG_Player_VM.CloseFG(); };
+
+            /*
+             * adding a nice functionality to the plots to enable zoom in/out but dont lose focus.
+             */
             Feature1And2Graph.MouseLeave += delegate (object s, MouseEventArgs e)
             {
                 PlotModelF1AndF2.ResetAllAxes();
@@ -130,6 +204,13 @@ namespace ex1
             };
         }
         
+
+        private void NotifyPropertyChanged(params string[] propertyNames)
+        {
+            foreach (var name in propertyNames)
+                this.PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(name));
+        }
+
         private string AdjustLegendTitle(string s)
         {
             if (s?.Length > 14)
@@ -151,6 +232,10 @@ namespace ex1
             p.LegendSymbolMargin = 5;
         }
 
+        /*
+         * the SetUpFeatureGraph methods is in order to set up the plot and add 'delegate' to the correct 
+         * OxyViewModel with the correct string.
+         */
         private void SetUpFeature1Graph()
         {
             PlotModelF1 = new PlotModel();
@@ -164,15 +249,10 @@ namespace ex1
             };
         }
 
-        public Dictionary<string, string> ToolTipStr{ get; }
-
-
-        private void NotifyPropertyChanged(params string[] propertyNames)
-        {
-            foreach (var name in propertyNames)
-                this.PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(name));
-        }
-
+        /*
+         * the UpdateFeaturesGraph methods are called when there's an update. for example change the legend of the
+         * plot and drawing new point and lines in the graphs.
+         */
         private void UpdateFeatures1Graph()
         {
             Series ls = OxyViewModel_VM_F1.Ls;
@@ -279,7 +359,7 @@ namespace ex1
                 Feature1And2Graph.InvalidatePlot(true);
             }
         }
-        public bool ShowCorObject_CheckBoxIsChecked { get; set; }
+        
         private void SpeedTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             KeyConverter kc = new KeyConverter();
@@ -341,6 +421,11 @@ namespace ex1
                 Utils.GetFilePathFromUserGUI("Flight recording file", "*.csv;*.txt;*.log");
         }
 
+
+        /*
+         * get from th user path to dll.
+         * loads detectr from dll file and show for fice seconds that the file is added.
+         */
         private void AddDetector_Click(object sender, RoutedEventArgs e)
         {
             var path = Utils.GetFilePathFromUserGUI("Anomaly Detecion algorithim", "*.dll");
@@ -368,58 +453,8 @@ namespace ex1
                 AddedDetectorLabelsVisibility = Visibility.Hidden;
             }).Start();
         }
-        private Visibility m_AddedDetectorLabelsVisibility = Visibility.Hidden;
-        public Visibility AddedDetectorLabelsVisibility
-        {
-            get { return m_AddedDetectorLabelsVisibility; }
-
-            set
-            {
-                m_AddedDetectorLabelsVisibility = value;
-                NotifyPropertyChanged("AddedDetectorLabelsVisibility");
-            }
-        }
-
-        public IFlightGearPlayerViewModel IFlightGearPlayerViewModel
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        public IFlightGearPlayerViewModel IFlightGearPlayerViewModel1
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        public IJoystickViewModel IJoystickViewModel
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        public IAnomalyDetectorsManager IAnomalyDetectorsManager
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        public IOxyViewModel IOxyViewModel
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
+        
+        
         private void SkipNextAnomaly_Click(object sender, RoutedEventArgs e)
         {
             FG_Player_VM.VM_CurrentTimeStep = AnomalySelect_VM.VM_NextAnomalyRange;
