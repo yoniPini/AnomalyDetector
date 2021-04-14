@@ -92,10 +92,10 @@ namespace DLL
 			ad.DefaultFeatures = ...
 			ad.Lin_Reg_Threshold = ...
 			while (...) {
+				ad.Dispose()
 				ad.Learn(...)
 				ad.Detect(...)
 				using of NormalModel, MostCorrelativeWith, LastDetection, LastReports
-				ad.Dispose()
 				// next iteration
 			}
 		*/

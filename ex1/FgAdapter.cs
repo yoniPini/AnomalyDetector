@@ -7,6 +7,7 @@ using System.Diagnostics;
 
 namespace ex1
 {
+    // class to control = start up and send playback to the fg simulator process
     class FgAdapter
     {
         private FgTcp fgTcp;
@@ -24,11 +25,13 @@ namespace ex1
 
         public event action OnFGClosing;
 
+        // get path were the "fgfs.exe" exists. path should ends with \ (directory delimeter)
         public FgAdapter(string fgDirPath)
         {
             this.fgPath = fgDirPath;
         }
 
+        // start a new process of fgfs.exe and establish connection with it (via fgTcp) [code waiting]
         public bool Start(string protocolName, int dataPort = 5400, int telnetPort = 5402)
         {
             string FGargs = " --timeofday=noon" +
@@ -69,7 +72,7 @@ namespace ex1
             {
                 try
                 {
-                    this.fgProcess?.Kill();
+                    this.fgProcess?.Kill(); // don't know why Close() doesn't work
                     this.fgProcess?.Dispose();
                 }
                 catch { }

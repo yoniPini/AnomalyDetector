@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
-//using System.Timers;
+
 namespace ex1
 {
+    // class [view model] to select which get data (from IAnomalyGraphModel)
+    // and prepare these data to the view
+    // the data is about how much features there are, which one is selected and so on
+    // On the other hand, this class will change the IAnomalyGraphModel selected feature [feature 1]
     public class AnomalySelectViewModel : IAnomalySelectViewModel
     {
         private IAnomalyGraphModel model;
@@ -44,7 +48,7 @@ namespace ex1
                     model.SelectedDetectorIdx = value; // to update view
                 }
             }
-        }         //x.DefaultFeatures; x.Detect; x.Learn;
+        } 
         public string LoadDetectorFromDll(string fromDllPath)
         {
             return model.LoadDetectorFromDll(fromDllPath);

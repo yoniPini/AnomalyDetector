@@ -8,8 +8,14 @@ using System.Timers;
 
 namespace ex1
 {
+    // class of player on time steps playback.
+    // which we can subsribed to PropertyChanged to get notice when CurrentTimeStep changed
+    // or we can change it. ("skip" time in video)
+
+    // this is the center of the program
     public class FlightGearPlayerModel : IFlightGearPlayerModel
     {
+        // ITableSeriesNotify :
         public Dictionary<string, float> FeaturesValue { get {
                 var d = new Dictionary<string, float>();
                 foreach (string s in AllFeaturesList)
@@ -22,20 +28,20 @@ namespace ex1
                 return Table?.featuresStrAsList ?? new List<string>();
             } }
 
-
+        // IFlightGearPlayerModel :
         public double Const_OriginalHz { get { return 10.00; } }
-        // only binding from model view -> model :
+
+
+        // changes should be only from associated FlightGearPlayerViewModel [vm -> model] :
         public string FG_Path { get; set; }
         public string XML_Path { get; set; }
         public string LearnCsv_Path { get; set; }
         public string TestCsv_Path { get; set; }
 
-        public bool IsPowerOn => (this.fgAdapter != null);// && !this.shouldWaitForFgAdapter;
-       // public bool IsPowerOff =>  (this.fgAdapter == null ) && !this.shouldWaitForFgAdapter;
+        public bool IsPowerOn => (this.fgAdapter != null);
 
         private bool isRunningNow;
         public bool IsRunning { get { return isRunningNow; } set {
-                //if (isRunningNow == value) return;
                 if (value)
                     Play();
                 else
@@ -49,18 +55,25 @@ namespace ex1
         public int CurrentTimeStep { get { return currTimeStep; } 
             set { 
                 currTimeStep = Math.Min(MaxTimeStep, Math.Max(0, value)); 
-                NotifyPropertyChanged("CurrentTimeStep", "CurrentTimeInStr", "FeaturesValue"); } } // 95 for example
+                NotifyPropertyChanged("CurrentTimeStep", "CurrentTimeInStr", "FeaturesValue"); } }
+        
+        
+        // The return value is one of the aviable timesteps
         public int MaxTimeStep { get { 
                 if(ts != null)
                     return ts.RowsLength - 1;
                 return 0;
-            } } // including the return value
+            } } 
+        
+        // get int between 0 and 99 and return its 2 digit representaion
         private String TwoDigitsRepr(int x)
         {
             if (x == 0) return "00";
             if (x >= 10) return "" + x;
             return "0" + x;
         }
+        
+        // "00:01:35 for example"
         public String CurrentTimeInStr { get {
                 int curr = CurrentTimeStep;
                 int currSec = curr / (int)Const_OriginalHz;
@@ -69,7 +82,7 @@ namespace ex1
                 currSec = currSec % 60;
                 currMin = currMin % 60;
                 return TwoDigitsRepr(currHour) + ":" + TwoDigitsRepr(currMin) + ":" + TwoDigitsRepr(currSec);
-            } } // "00:01:35 for example"
+            } } 
         private double speed;
         public double SpeedTimes { get { return speed; } set { speed = value; UpdateSpeed(); NotifyPropertyChanged("SpeedTimes"); } }// 1.5 = "x1.5" speed
         
@@ -91,7 +104,6 @@ namespace ex1
         }
         private void NotifyPropertyChanged(params string[] propertyNames)
         {
-            //if (timer == null || fgAdapter == null || ts == null) return;
                 foreach (var name in propertyNames)
                 this.PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(name));
         }
@@ -103,6 +115,10 @@ namespace ex1
             this.timer.Interval = timeBetweenFrames;
         }
         private bool shouldWaitForFgAdapter = true;
+        
+        
+        // if there is no yet simulator, open one and establish connection (in diffrent thread).
+        // start the playing = timestep increasment in timer
         public void Play() {
             if (timer == null || fgAdapter == null || ts == null)
             {
@@ -117,15 +133,20 @@ namespace ex1
                     this.fgAdapter?.SendPlayback(ts.getRowAsString(CurrentTimeStep));
                 };
                 fgAdapter.OnFGClosing += delegate () { 
+                                                       // DONT ADD IsPaused = true
                                                        this.fgAdapter = null;
                                                        CloseFG();
                                                     };
                 ts = new TableSeries(this.TestCsv_Path, Utils.ParseFeaturesLine(this.XML_Path));
 
+                // wait to the simulator to be ready,
+                // but in diffrent thread (the waiting, the simulator is in different process)
                 this.shouldWaitForFgAdapter = true;
                 new System.Threading.Thread(delegate ()
                 {
-                    fgAdapter?.Start(new FileDetails(this.XML_Path).NameWithoutExtension);
+                    fgAdapter?.Start(new FileDetails(this.XML_Path).NameWithoutExtension); // [code waiting] in this new thread
+
+                    // DONT add IsPaused or IsRunning, to avoid infinty loop / problems with multithreads
                     if (timer == null || fgAdapter == null || ts == null)
                     {
                         currTimeStep = 0;
@@ -140,7 +161,7 @@ namespace ex1
                 NotifyPropertyChanged("MaxTimeStep", "AllFeaturesList");
                 NotifyPropertyChanged("IsPowerOn");
             }
-
+            // DONT add IsPaused or IsRunning, to avoid infinty loop / problems with multithreads
             if (shouldWaitForFgAdapter) return;
             UpdateSpeed();
             timer?.Start();
