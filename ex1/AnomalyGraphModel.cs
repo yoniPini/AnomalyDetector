@@ -8,11 +8,15 @@ using System.ComponentModel;
 
 namespace ex1
 {
+    // class which get data of timesteps from IFlightGearPlayerModel
+    // and anlyze anomaly reporty via IAnomalyDetectorsManager
+    // and produce the calculated data to IOxyViewModel (for graph draw)
+    // and to IAnomalySeletViewModel for the ability to choose feature amoung the aviable features
+    
+    // First element is added automatically= Empty Anomaly detector [doesn't report any anomaly],
+    // (in index 0)
     public class AnomalyGraphModel : IAnomalyGraphModel
     {
-        //private ITableSeriesListener
-        //private IAnomalyDetectionManager
-        // con : IAnomalyDetector x;
         private IFlightGearPlayerModel fgModel;
         private IAnomalyDetectorsManager detectorsManager;
         public AnomalyGraphModel(IFlightGearPlayerModel fgModel)
@@ -23,46 +27,45 @@ namespace ex1
                 if (e.PropertyName == "CurrentTimeStep") 
                     NotifyPropertyChanged("Feature1Traces", "Feature2Traces", "Features1And2",
                          "NextAnomalyRange", "HasNextAnomalyRange");
-                if (e.PropertyName == "IsPowerOn") this.updatedDetectors.Clear();
-                //if (e.PropertyName == "IsRunning") this.SelectedDetectorIdx = SelectedDetectorIdx;
+                // power on-off reset the 'updated' detectors
+                if (e.PropertyName == "IsPowerOn") this.updatedDetectors.Clear(); 
             };
+            // add detector manager with first element as Empty Anomaly detector [doesn't report any anomaly]
             this.detectorsManager = new AnomalyDetectorsManager();
             this.detectorsManager.AddAnomalyDetector(AnomalyDetectorsManager.EmptyAnomalyDetector);
             this.detectorsManager.CurrentDetectorIdx = 0;
         }
         public List<string> AllFeaturesList { get { return this.fgModel.AllFeaturesList; } }
 
-        // private int m_selectedDetectorIndex = -1;
-       // int debug = 0;
+        // get or set the detector (via idx) which the other properties of this class refer to
         public int SelectedDetectorIdx
         {
             get { return detectorsManager.CurrentDetectorIdx; }
             set {
-               // debug = 1;
                 if (detectorsManager.CurrentDetectorIdx == value || value < 0 || value >= detectorsManager.Detectors.Count)
                 {
-                    this.Feature1 = this.Feature1;
+                    this.Feature1 = this.Feature1; // make Feature1 to "refresh" its value
                     return;
                 }
                 detectorsManager.CurrentDetectorIdx = value;
-                this.Feature1 = this.Feature1;
+                this.Feature1 = this.Feature1;              // make Feature1 to "refresh" its value
                 NotifyPropertyChanged("SelectedDetectorIdx");
-                //currentFeature1AnomaliesTimeStep = new HashSet<long>();
             }
         }
-        /*
-         */
-
-        //notify...    //x.DefaultFeatures; x.Detect; x.Learn;
-
+        
         public event PropertyChangedEventHandler PropertyChanged;
 
+        // add detector to detectorManager and return "{name}\n{description}" if succeeded,
+        // empty string if failed
         public string LoadDetectorFromDll(string fromDllPath) { 
             var d = this.detectorsManager.AddAnomalyDetector(fromDllPath);
             if (d == null) return "";
             return d.Name + " :\n" + d.Description;
         }
+        // list of detectors that the learning and detecting are already update for the current xml+train_csv+test_csv
         private List<int> updatedDetectors = new List<int>();
+
+        // make the selected detector :  learn the normal model ,and detect anomalies
         public bool Analyze()
         {
             if (updatedDetectors.Contains(SelectedDetectorIdx)) return true;
@@ -78,15 +81,11 @@ namespace ex1
         }
 
         private string feature1 = "";
+        // if the "current" feature has anomaly in timestep x iff the above set contains x
         private HashSet<long> currentFeature1AnomaliesTimeStep = new HashSet<long>();
         public string Feature1 { get { return feature1; }
             set {
-                //if (value == feature1 || !AllFeaturesList.Contains(value)) return;
-               // if (debug == 1)
-                //{
-                  //  debug = 0;
-                   // System.Windows.MessageBox.Show("a");
-               // }
+                // check selected feature exist. any way "update" the listeners to PropertyChanged
                 if (!AllFeaturesList.Contains(value)) {
                     feature1 = "";
                     currentFeature1AnomaliesTimeStep = new HashSet<long>();
@@ -97,7 +96,10 @@ namespace ex1
                 }
                  feature1 = value;
 
-                 List<AnomalyReport> anomalyList;
+                // update the currentFeature1AnomaliesTimeStep due the selected feature
+                // even if it's the prev value, in order to be updated (see  SelectedDetectorIdx  setter),
+                // because maybe the whole test_csv was changed
+                List<AnomalyReport> anomalyList;
                 if (SelectedDetectorIdx < 0 || CurrDetector == null)
                     anomalyList = new List<AnomalyReport>();
                 else
@@ -110,9 +112,10 @@ namespace ex1
                                 "Feature2", "CorrelationObject", "CorrelationObjectType");
                 NotifyPropertyChanged("Feature1Traces", "Feature2Traces", "Features1And2");
             }
-        } // i.e. SelectedFeature //notify..
-        /*
-         */
+        }
+
+        // get the next anomaly that apper after
+        // currtimestep + 30 timesteps == currtimestep + 3 sec == currtimestep + 3* hz
         public int NextAnomalyRange { 
             get
             {
@@ -128,20 +131,17 @@ namespace ex1
         private CorrelatedFeatures GetCurrentCorrelatedFeatures()
         {
             if (String.IsNullOrWhiteSpace(Feature1) || CurrDetector == null) return null;
-            //try
-            //{
                 return CurrDetector.MostCorrelativeWith(Feature1);
-            //}
-            //catch
-            //{
-            //    return null;
-            //}
         }
+        
+        // i.e. if the detector has found someother feature,
+        // =feature2 that it's correlative with feature1
         public bool IsFeature2Exists { 
             get {
                 return GetCurrentCorrelatedFeatures() != null;
-            } } // i.e. if the detector has found someother feature,
-                                             // =feature2 that it's correlative with feature1
+            } } 
+        
+        // i.e. Most Correlative to Feature1
         public string Feature2
         {
             get
@@ -149,7 +149,10 @@ namespace ex1
                 return GetCurrentCorrelatedFeatures()?.feature2 ?? "";
             }
         
-        } // i.e. Most Correlative to Feature1
+        } 
+
+        // get [currentTimeStep-30 , currentTimeStep] points (special point has also field if it's anomaly)
+        // x is timestep, y is value of feature 1
         public List<SpecialPoint> Feature1Traces { 
             get
             {
@@ -167,7 +170,10 @@ namespace ex1
                     list.Add(new SpecialPoint(i, value, isAnomaly));
                 }
                 return list;
-            }} // <timestep[i], value[i]> for i in last 30 timesteps
+            }}
+
+        // get [currentTimeStep-30 , currentTimeStep] points (special point has also field if it's anomaly)
+        // x is timestep, y is value of feature 2
         public List<SpecialPoint> Feature2Traces
         {
             get
@@ -187,7 +193,7 @@ namespace ex1
                 }
                 return list;
             }
-        } // <timestep[i], value[i]> for i in last 30 timesteps
+        }
         private IAnomalyDetector CurrDetector
         {
             get {
@@ -196,6 +202,9 @@ namespace ex1
             }
             
         }
+
+    
+    // < x=feature1 values[i], y=feature2 values[i], ?isAnomaly > for i in last 30 timesteps
     public List<SpecialPoint> Features1And2
     {
         get
@@ -217,8 +226,7 @@ namespace ex1
             return list;
         }
     }
- // <x[i],y[i]> for i in last 30 timesteps
-public object CorrelationObject { 
+        public object CorrelationObject { 
             get {
                 if (CurrDetector == null || String.IsNullOrWhiteSpace(Feature1)) return null;
                 return CurrDetector.MostCorrelativeWith(Feature1)?.objectOfCorrelation;
