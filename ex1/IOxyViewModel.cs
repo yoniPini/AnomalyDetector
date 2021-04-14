@@ -1,4 +1,10 @@
-﻿using System;
+﻿/**
+ * this class is responsible for supllying the relrvant data according the given string property.
+ * for example' when given "Feature1Traces" 
+ */
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
