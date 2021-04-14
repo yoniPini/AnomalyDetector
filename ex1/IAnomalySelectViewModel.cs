@@ -18,6 +18,8 @@ namespace ex1
         bool VM_IsFeature2Exists { get; }
         string VM_Feature2 { get; }
         string VM_CorrelationObjectType { get; }
+        int VM_NextAnomalyRange { get; }
+        bool VM_HasNextAnomalyRange { get; }
 
         // INotifyPropertyChanged:
         // event PropertyChangedEventHandler PropertyChanged;

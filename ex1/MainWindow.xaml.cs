@@ -419,5 +419,10 @@ namespace ex1
             {
             }
         }
+
+        private void SkipNextAnomaly_Click(object sender, RoutedEventArgs e)
+        {
+            FG_Player_VM.VM_CurrentTimeStep = AnomalySelect_VM.VM_NextAnomalyRange;
+        }
     }
 }

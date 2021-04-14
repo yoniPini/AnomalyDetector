@@ -37,6 +37,8 @@ namespace ex1
         object CorrelationObject { get; }
         
         string CorrelationObjectType { get; }
+        int NextAnomalyRange { get; }
+        bool HasNextAnomalyRange { get; }
 
         // INotifyPropertyChanged:
         // event PropertyChangedEventHandler PropertyChanged;

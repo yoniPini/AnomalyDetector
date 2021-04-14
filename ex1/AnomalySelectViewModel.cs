@@ -60,6 +60,8 @@ namespace ex1
         public bool VM_IsFeature2Exists { get { return model.IsFeature2Exists; } }
         public string VM_Feature2 { get { return model.Feature2; } }
         public string VM_CorrelationObjectType { get { return model.CorrelationObjectType; } }
+        public int VM_NextAnomalyRange => model.NextAnomalyRange;
+        public bool VM_HasNextAnomalyRange => model.HasNextAnomalyRange;
 
         // INotifyPropertyChanged:
         public event PropertyChangedEventHandler PropertyChanged;

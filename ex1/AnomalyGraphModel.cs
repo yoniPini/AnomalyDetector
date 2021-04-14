@@ -21,7 +21,8 @@ namespace ex1
             fgModel.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e) {
                 if (e.PropertyName == "AllFeaturesList") NotifyPropertyChanged("AllFeaturesList");
                 if (e.PropertyName == "CurrentTimeStep") 
-                    NotifyPropertyChanged("Feature1Traces", "Feature2Traces", "Features1And2");
+                    NotifyPropertyChanged("Feature1Traces", "Feature2Traces", "Features1And2",
+                         "NextAnomalyRange", "HasNextAnomalyRange");
                 if (e.PropertyName == "IsPowerOn") this.updatedDetectors.Clear();
                 //if (e.PropertyName == "IsRunning") this.SelectedDetectorIdx = SelectedDetectorIdx;
             };
@@ -89,7 +90,7 @@ namespace ex1
                 if (!AllFeaturesList.Contains(value)) {
                     feature1 = "";
                     currentFeature1AnomaliesTimeStep = new HashSet<long>();
-                    NotifyPropertyChanged("Feature1", "IsFeature2Exists",
+                    NotifyPropertyChanged("Feature1", "IsFeature2Exists", "NextAnomalyRange", "HasNextAnomalyRange",
                                 "Feature2", "CorrelationObject", "CorrelationObjectType");
                     NotifyPropertyChanged("Feature1Traces", "Feature2Traces", "Features1And2");
                     return; 
@@ -105,13 +106,25 @@ namespace ex1
                 foreach (var anomaly in anomalyList)
                     currentFeature1AnomaliesTimeStep.Add(anomaly.timeStep);
                 
-                NotifyPropertyChanged("Feature1", "IsFeature2Exists",
+                NotifyPropertyChanged("Feature1", "IsFeature2Exists", "NextAnomalyRange", "HasNextAnomalyRange",
                                 "Feature2", "CorrelationObject", "CorrelationObjectType");
                 NotifyPropertyChanged("Feature1Traces", "Feature2Traces", "Features1And2");
             }
         } // i.e. SelectedFeature //notify..
         /*
          */
+        public int NextAnomalyRange { 
+            get
+            {
+                var x = currentFeature1AnomaliesTimeStep;
+                var maxStep = fgModel.MaxTimeStep;
+                int i = (int)(fgModel.CurrentTimeStep + 3 * fgModel.Const_OriginalHz);
+                for (; i <= maxStep; i++)
+                    if (x.Contains(i)) return i;
+                return -1;
+            } }
+
+        public bool HasNextAnomalyRange => NextAnomalyRange != -1;
         private CorrelatedFeatures GetCurrentCorrelatedFeatures()
         {
             if (String.IsNullOrWhiteSpace(Feature1) || CurrDetector == null) return null;
@@ -147,7 +160,7 @@ namespace ex1
                     anomalyList = new List<AnomalyReport>();
                 else
                     anomalyList = CurrDetector.LastReports(Feature1);
-                for (int i = Math.Max(fgModel.CurrentTimeStep - 30, 0); i < fgModel.CurrentTimeStep; i++)
+                for (int i = Math.Max(fgModel.CurrentTimeStep - 30, 0); i <= fgModel.CurrentTimeStep; i++)
                 {
                     float value = fgModel.Table.getCell(i, Feature1);
                     bool isAnomaly = currentFeature1AnomaliesTimeStep.Contains(i);
@@ -166,7 +179,7 @@ namespace ex1
                     anomalyList = new List<AnomalyReport>();
                 else
                     anomalyList = CurrDetector.LastReports(Feature1);
-                for (int i = Math.Max(fgModel.CurrentTimeStep - 30, 0); i < fgModel.CurrentTimeStep; i++)
+                for (int i = Math.Max(fgModel.CurrentTimeStep - 30, 0); i <= fgModel.CurrentTimeStep; i++)
                 {
                     float value = fgModel.Table.getCell(i, Feature2);
                     bool isAnomaly = currentFeature1AnomaliesTimeStep.Contains(i);
@@ -194,7 +207,7 @@ namespace ex1
                 anomalyList = new List<AnomalyReport>();
             else
                 anomalyList = CurrDetector.LastReports(Feature1);
-            for (int i = Math.Max(fgModel.CurrentTimeStep - 30, 0); i < fgModel.CurrentTimeStep; i++)
+            for (int i = Math.Max(fgModel.CurrentTimeStep - 30, 0); i <= fgModel.CurrentTimeStep; i++)
             {
                 float valueF1 = fgModel.Table.getCell(i, Feature1);
                 float valueF2 = fgModel.Table.getCell(i, Feature2);
