@@ -1,6 +1,7 @@
 # ex1
 
 Flight Inspection App, ex1, Advanced Programming 2, biu
+<br><b>This repository uses oxyplot libraries, which using is due to their license.</b>
 
 Sections :
 
